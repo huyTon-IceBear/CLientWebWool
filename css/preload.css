@@ -79,6 +79,7 @@ body {
   animation: loading infinite 0.8s ease 0.05s;
   position: absolute;
 }
+
 .loading-animate:before {
   content: '';
   width: 44px;
@@ -90,25 +91,31 @@ body {
   position: absolute;
   opacity: 0.6;
 }
+
 .btn.loading {
   width: 60px;
 }
+
 .btn.loading i {
   transform: rotate(-90deg);
   padding-bottom: 4px;
   padding-left: 3px;
 }
+
 .btn.loading .text {
   transform: translate(-140px);
 }
+
 .btn.loading .loading-animate {
   opacity: 1;
 }
+
 .btn.loaded {
-  opacity: 0;
+  display: none;
   -webkit-transition: all 0.3s ease-out;
   transition: all 0.3s ease-out;
 }
+
 @keyframes loading {
   0% {
     transform: rotate(0deg);
