@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Button Loading Animation on Click Using HTML5, CSS3 & JavaScript
+    </title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+      integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+      crossorigin="anonymous"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <link rel="stylesheet" href="../css/preload.css" />
+    <link rel="stylesheet" href="../css/convesation.css" />
+  </head>
+  <body>
+    <button class="btn">
+      <i class="far fa-paper-plane"></i>
+      <span class="text"> Start Chatting </span>
+      <span class="loading-animate"></span>
+    </button>
+    <div id="loader-wrapper">
+      <div class="loader-section section-left"></div>
+      <div class="loader-section section-right"></div>
+    </div>
+    <div class="content">
+      <div class="bubbleWrapper">
+        <div class="inlineContainer">
+          <img
+            class="inlineIcon"
+            src="https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png"
+          />
+          <div class="otherBubble other">No ninjas!</div>
+        </div>
+        <span class="other">08:41</span>
+      </div>
+      <div class="bubbleWrapper">
+        <div class="inlineContainer own">
+          <img
+            class="inlineIcon"
+            src="https://www.pinclipart.com/picdir/middle/205-2059398_blinkk-en-mac-app-store-ninja-icon-transparent.png"
+          />
+          <div class="ownBubble own">
+            The first rule of being a ninja is, 'Do no harm.'
+          </div>
+        </div>
+        <span class="own">08:55</span>
+      </div>
+      <div class="bubbleWrapper">
+        <div class="inlineContainer">
+          <img
+            class="inlineIcon"
+            src="https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png"
+          />
+          <div class="otherBubble other">
+            Knowing when to leave requires training.
+          </div>
+        </div>
+      </div>
+      <span class="other">10:13</span>
+      <div class="bubbleWrapper">
+        <div class="inlineContainer own">
+          <img
+            class="inlineIcon"
+            src="https://www.pinclipart.com/picdir/middle/205-2059398_blinkk-en-mac-app-store-ninja-icon-transparent.png"
+          />
+          <div class="ownBubble own">Stunned but impressed.</div>
+        </div>
+        <span class="own">11:07</span>
+      </div>
+      <div class="bubbleWrapper">
+        <div class="inlineContainer">
+          <img
+            class="inlineIcon"
+            src="https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png"
+          />
+          <div class="otherBubble other">How about throwing stars?</div>
+        </div>
+        <span class="other">11:11</span>
+      </div>
+    </div>
+    <script src="../scripts/preload.js"></script>
+  </body>
+</html>
