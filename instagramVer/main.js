@@ -1,8 +1,11 @@
 let convoContainer = document.getElementsByClassName("container")[0];
 
-let token = "";
+let token = "",
+  statement = "",
+  dialogueId = "",
+  node = "";
 let content = [];
-let statement = "";
+let interactionId = 0;
 
 window.onload = function () {
   $.ajax({
@@ -34,9 +37,8 @@ function startDialog() {
     },
     headers: { "X-Auth-Token": token },
     success: function (res) {
-      statement = res.statement.segments[0].text;
-      content = res.replies;
-      console.log(content);
+      console.log(res);
+      getInfoNode(res);
       renderHTML();
     },
   });
@@ -45,21 +47,51 @@ function startDialog() {
 function renderHTML() {
   let agentStatement = "";
   let replies = "";
-  let a;
 
   agentStatement += `<div class="statement">${statement}</div>`;
 
   for (let i = 0; i < content.length; i++) {
-    replies += `<div class="reply${i}">${content[i].statement.segments[0].text}</div>`;
+    const r = content[i].statement?.segments[0].text || "Continue";
+    replies += `<div class="${node}-${interactionId}-reply${i}">${r}</div>`;
   }
-
-//   const a = document.getElementsByClassName("reply0")[0];
-    // a.addEventListener("click", sayHi);
 
   let data = agentStatement + replies;
   convoContainer.insertAdjacentHTML("beforeend", data);
+
+  for (let i = 0; i < content.length; i++) {
+    const a = document.getElementsByClassName(`${node}-${interactionId}-reply${i}`)[0];
+    a.setAttribute("reply-id", content[i].replyId);
+    console.log(a);
+    a.addEventListener("click", progress);
+  }
 }
 
-function sayHi() {
-    console.log("Hi")
+function progress(e) {
+  e.preventDefault();
+  let id = parseInt(e.target.getAttribute("reply-id"));
+
+  $.ajax({
+    url: "http://localhost:8080/wool/v1/dialogue/progress",
+    type: "POST",
+    dataType: "json",
+    data: {
+      loggedDialogueId: dialogueId,
+      loggedInteractionIndex: interactionId,
+      replyId: id,
+    },
+    headers: { "X-Auth-Token": token },
+    success: function (res) {
+      console.log(res);
+      getInfoNode(res);
+      renderHTML();
+    },
+  });
+}
+
+function getInfoNode(res) {
+  node = res.value?.node || res.node;
+  statement = res.value?.statement.segments[0].text || res.statement.segments[0].text;
+  content = res.value?.replies || res.replies;
+  dialogueId = res.value?.loggedDialogueId || res.loggedDialogueId;
+  interactionId = res.value?.loggedInteractionIndex || res.loggedInteractionIndex;
 }
