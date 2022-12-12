@@ -59,8 +59,11 @@ function renderHTML() {
   convoContainer.insertAdjacentHTML("beforeend", data);
 
   for (let i = 0; i < content.length; i++) {
-    const a = document.getElementsByClassName(`${node}-${interactionId}-reply${i}`)[0];
+    const a = document.getElementsByClassName(
+      `${node}-${interactionId}-reply${i}`
+    )[0];
     a.setAttribute("reply-id", content[i].replyId);
+    a.setAttribute("endOrNot", content[i].endsDialogue);
     console.log(a);
     a.addEventListener("click", progress);
   }
@@ -69,29 +72,34 @@ function renderHTML() {
 function progress(e) {
   e.preventDefault();
   let id = parseInt(e.target.getAttribute("reply-id"));
-
-  $.ajax({
-    url: "http://localhost:8080/wool/v1/dialogue/progress",
-    type: "POST",
-    dataType: "json",
-    data: {
-      loggedDialogueId: dialogueId,
-      loggedInteractionIndex: interactionId,
-      replyId: id,
-    },
-    headers: { "X-Auth-Token": token },
-    success: function (res) {
-      console.log(res);
-      getInfoNode(res);
-      renderHTML();
-    },
-  });
+  let end = e.target.getAttribute("endOrNot");
+  if (end) {
+    convoContainer.insertAdjacentText("beforeend", "End Dialogue.");
+  } else
+    $.ajax({
+      url: "http://localhost:8080/wool/v1/dialogue/progress",
+      type: "POST",
+      dataType: "json",
+      data: {
+        loggedDialogueId: dialogueId,
+        loggedInteractionIndex: interactionId,
+        replyId: id,
+      },
+      headers: { "X-Auth-Token": token },
+      success: function (res) {
+        console.log(res);
+        getInfoNode(res);
+        renderHTML();
+      },
+    });
 }
 
 function getInfoNode(res) {
   node = res.value?.node || res.node;
-  statement = res.value?.statement.segments[0].text || res.statement.segments[0].text;
+  statement =
+    res.value?.statement.segments[0].text || res.statement.segments[0].text;
   content = res.value?.replies || res.replies;
   dialogueId = res.value?.loggedDialogueId || res.loggedDialogueId;
-  interactionId = res.value?.loggedInteractionIndex || res.loggedInteractionIndex;
+  interactionId =
+    res.value?.loggedInteractionIndex || res.loggedInteractionIndex;
 }
