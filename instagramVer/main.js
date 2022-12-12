@@ -63,8 +63,7 @@ function renderHTML() {
       `${node}-${interactionId}-reply${i}`
     )[0];
     a.setAttribute("reply-id", content[i].replyId);
-    a.setAttribute("endOrNot", content[i].endsDialogue);
-    console.log(a);
+    a.setAttribute("end-or-not", content[i].endsDialogue);
     a.addEventListener("click", progress);
   }
 }
@@ -72,10 +71,14 @@ function renderHTML() {
 function progress(e) {
   e.preventDefault();
   let id = parseInt(e.target.getAttribute("reply-id"));
-  let end = e.target.getAttribute("endOrNot");
-  if (end) {
+  let end = e.target.getAttribute("end-or-not");
+
+  if (end === "true") {
     convoContainer.insertAdjacentText("beforeend", "End Dialogue.");
-  } else
+  } else {
+    const input = `<div class="user-${id}">${e.target.innerHTML}</div>`;
+    convoContainer.insertAdjacentHTML("beforeend", input);
+
     $.ajax({
       url: "http://localhost:8080/wool/v1/dialogue/progress",
       type: "POST",
@@ -92,6 +95,7 @@ function progress(e) {
         renderHTML();
       },
     });
+  }
 }
 
 function getInfoNode(res) {
