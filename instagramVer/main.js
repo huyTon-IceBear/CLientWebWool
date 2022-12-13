@@ -52,10 +52,12 @@ function renderHTML() {
 
   for (let i = 0; i < content.length; i++) {
     const r = content[i].statement?.segments[0].text || "Continue";
-    replies += `<div class="${node}-${interactionId}-reply${i}">${r}</div>`;
+    replies += `<p class="${node}-${interactionId}-reply${i}">${r}</p>`;
   }
 
-  let data = agentStatement + replies;
+  let repliesCtr = `<div class="reply-container">${replies}</div>`;
+
+  let data = agentStatement + repliesCtr;
   convoContainer.insertAdjacentHTML("beforeend", data);
 
   for (let i = 0; i < content.length; i++) {
@@ -76,7 +78,7 @@ function progress(e) {
   if (end === "true") {
     convoContainer.insertAdjacentText("beforeend", "End Dialogue.");
   } else {
-    const input = `<div class="user-${id}">${e.target.innerHTML}</div>`;
+    const input = `<p class="user-${id}">${e.target.innerHTML}</p>`;
     convoContainer.insertAdjacentHTML("beforeend", input);
 
     $.ajax({
