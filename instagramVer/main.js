@@ -57,7 +57,10 @@ function renderHTML() {
 
   let repliesCtr = `<div class="reply-container">${replies}</div>`;
 
-  let data = agentStatement + repliesCtr;
+  let data = `<div class="agent-data">
+              <img src="https://img.icons8.com/external-linector-lineal-linector/64/null/external-avatar-man-avatar-linector-lineal-linector-6.png" class="ava">
+              <div>${agentStatement}${repliesCtr}</div>
+              </div>`;
   convoContainer.insertAdjacentHTML("beforeend", data);
 
   for (let i = 0; i < content.length; i++) {
@@ -76,9 +79,12 @@ function progress(e) {
   let end = e.target.getAttribute("end-or-not");
 
   if (end === "true") {
-    convoContainer.insertAdjacentText("beforeend", "End Dialogue.");
+    convoContainer.insertAdjacentHTML("beforeend", `<div class="end-dialogue">End Dialogue.</div>`);
   } else {
-    const input = `<p class="user-${id}">${e.target.innerHTML}</p>`;
+    const input = `<div class="user-data">
+                    <p class="user-${id}">${e.target.innerHTML}</p>
+                    <img src="https://img.icons8.com/external-linector-lineal-linector/64/null/external-avatar-man-avatar-linector-lineal-linector-6.png" class="ava">
+                  </div>`;
     convoContainer.insertAdjacentHTML("beforeend", input);
 
     $.ajax({

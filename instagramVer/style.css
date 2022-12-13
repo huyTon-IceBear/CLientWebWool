@@ -10,6 +10,20 @@ body{
     flex-wrap: nowrap;
 }
 
+.agent-data, .user-data{
+    display: flex;
+    flex-direction: row;
+}
+
+.ava{
+    vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 0.2em;
+    padding: 0.2em;
+}
+
 .statement{
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
     width: fit-content;
@@ -23,7 +37,7 @@ body{
     display: flex;
 }
 
-p[class*="reply"], p[class^="user"] {
+p[class*="reply"], p[class^="user"], .end-dialogue {
     width: fit-content;
     max-width: 60%;
     padding: 0.4em 1.25em 0.4em 1em;
@@ -46,7 +60,7 @@ p[class*="reply"]:active{
     background-color: aliceblue;
 }
 
-p[class^="user"]{
+p[class^="user"], .end-dialogue{
     margin-left: auto;
     background-color: beige;
     color: blueviolet;
