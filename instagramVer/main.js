@@ -4,6 +4,8 @@ let token = "",
   statement = "",
   dialogueId = "",
   node = "";
+let ava = `<img src="https://img.icons8.com/external-linector-lineal-linector/64/null/external-avatar-man-avatar-linector-lineal-linector-6.png" class="ava">`;
+
 let content = [];
 let interactionId = 0;
 
@@ -37,7 +39,6 @@ function startDialog() {
     },
     headers: { "X-Auth-Token": token },
     success: function (res) {
-      console.log(res);
       getInfoNode(res);
       renderHTML();
     },
@@ -57,10 +58,7 @@ function renderHTML() {
 
   let repliesCtr = `<div class="reply-container">${replies}</div>`;
 
-  let data = `<div class="agent-data">
-              <img src="https://img.icons8.com/external-linector-lineal-linector/64/null/external-avatar-man-avatar-linector-lineal-linector-6.png" class="ava">
-              <div>${agentStatement}${repliesCtr}</div>
-              </div>`;
+  let data = `<div class="agent-data">${ava}<div>${agentStatement}${repliesCtr}</div></div>`;
   convoContainer.insertAdjacentHTML("beforeend", data);
 
   for (let i = 0; i < content.length; i++) {
@@ -69,6 +67,8 @@ function renderHTML() {
     )[0];
     a.setAttribute("reply-id", content[i].replyId);
     a.setAttribute("end-or-not", content[i].endsDialogue);
+    a.setAttribute("interaction", interactionId);
+
     a.addEventListener("click", progress);
   }
 }
@@ -77,32 +77,36 @@ function progress(e) {
   e.preventDefault();
   let id = parseInt(e.target.getAttribute("reply-id"));
   let end = e.target.getAttribute("end-or-not");
+  let sameStep =
+    parseInt(e.target.getAttribute("interaction")) == interactionId;
 
-  if (end === "true") {
-    convoContainer.insertAdjacentHTML("beforeend", `<div class="end-dialogue">End Dialogue.</div>`);
-  } else {
-    const input = `<div class="user-data">
-                    <p class="user-${id}">${e.target.innerHTML}</p>
-                    <img src="https://img.icons8.com/external-linector-lineal-linector/64/null/external-avatar-man-avatar-linector-lineal-linector-6.png" class="ava">
-                  </div>`;
-    convoContainer.insertAdjacentHTML("beforeend", input);
+  if (sameStep) {
+    if (end === "true") {
+      convoContainer.insertAdjacentHTML(
+        "beforeend",
+        `<div class="end-dialogue">End Dialogue.</div>`
+      );
+      interactionId = -1;
+    } else {
+      const input = `<div class="user-data"><p class="user-${id}">${e.target.innerHTML}</p>${ava}</div>`;
+      convoContainer.insertAdjacentHTML("beforeend", input);
 
-    $.ajax({
-      url: "http://localhost:8080/wool/v1/dialogue/progress",
-      type: "POST",
-      dataType: "json",
-      data: {
-        loggedDialogueId: dialogueId,
-        loggedInteractionIndex: interactionId,
-        replyId: id,
-      },
-      headers: { "X-Auth-Token": token },
-      success: function (res) {
-        console.log(res);
-        getInfoNode(res);
-        renderHTML();
-      },
-    });
+      $.ajax({
+        url: "http://localhost:8080/wool/v1/dialogue/progress",
+        type: "POST",
+        dataType: "json",
+        data: {
+          loggedDialogueId: dialogueId,
+          loggedInteractionIndex: interactionId,
+          replyId: id,
+        },
+        headers: { "X-Auth-Token": token },
+        success: function (res) {
+          getInfoNode(res);
+          renderHTML();
+        },
+      });
+    }
   }
 }
 
