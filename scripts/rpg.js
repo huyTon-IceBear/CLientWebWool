@@ -101,6 +101,7 @@ $.ajax({
       }
       appendString += "</p> ";
       $(".text").append(appendString)
+      /* TODO: fix extra random item */
     });
 
     // $(".text").html("<h2>" + node.speaker + "</h2> <br>");
