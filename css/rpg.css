@@ -1,6 +1,6 @@
 :root { /* variables for stylesheet */
     --left_Image: 1%;
-    --left_Text: 8%; /* 7% higher then the image seems to work */
+    --left_Text: 9%; /* 8% higher then the image seems to work */
 }
 
 body {
@@ -17,20 +17,20 @@ body {
     left: 2.5%;
     background-color: #34495e;
     color: white; /*text color*/
-    padding: 2.5%;
+    padding: 10px;
     margin-bottom: 0;
     font-family: Arial, Helvetica, sans-serif;
     overflow: auto;
     display: flex;
     flex-direction: column;
-    /* TODO: fix overflow/flex */
+    justify-content: left;
 }
 
 .avatar {
     border: 2px solid #ddd;
     border-radius: 4px;
     padding: 2px;
-    position: absolute;
+    position: absolute; /* Position has to be absolute */
     max-width: 30%;
     max-height: 30%;
     alignment: left;
@@ -45,7 +45,7 @@ img:hover {
 
 .text {
     width: 80%;
-    position: absolute;
+    position: relative; /* Position has to be relative for flex */
     left: var(--left_Text);
     top: 0;
     flex-grow: 1;
@@ -53,6 +53,7 @@ img:hover {
 
 .button {
     background-color: #008CBA;
+    position: relative; /* Position has to be relative for flex */
     color: white;
     padding: 15px 32px;
     text-align: center;
@@ -66,6 +67,6 @@ img:hover {
 }
 
 .button:hover {
-    background-color: #ffffff; /* Green */
+    background-color: #ffffff;
     color: black;
 }
