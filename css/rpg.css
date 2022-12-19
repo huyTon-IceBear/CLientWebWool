@@ -1,0 +1,70 @@
+:root { /* variables for stylesheet */
+    --left_Image: 1%;
+    --left_Text: 8%; /* 7% higher then the image seems to work */
+}
+
+body {
+    background-color: #444444;
+}
+
+.textBox {
+    width: 90%;
+    height: auto;
+    min-height: 30%;
+    max-height: 50%;
+    position: absolute;
+    bottom: 2.5%;
+    left: 2.5%;
+    background-color: #34495e;
+    color: white; /*text color*/
+    padding: 2.5%;
+    margin-bottom: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.avatar {
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    padding: 2px;
+    position: absolute;
+    max-width: 30%;
+    max-height: 30%;
+    alignment: left;
+    top: 5%;
+    left: var(--left_Image);
+    flex-grow: 1;
+}
+
+img:hover {
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+
+.text {
+    width: 80%;
+    position: absolute;
+    left: var(--left_Text);
+    top: 0;
+    flex-grow: 1;
+}
+
+.button {
+    background-color: #008CBA;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 2px;
+    border: 3px solid #008CBA;
+    transition-duration: 0.4s;
+    flex-grow: 1;
+}
+
+.button:hover {
+    background-color: #ffffff; /* Green */
+    color: black;
+}
