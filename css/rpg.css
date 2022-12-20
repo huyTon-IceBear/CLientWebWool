@@ -9,7 +9,6 @@ body {
 
 .textBox {
     width: 90%;
-    height: auto;
     min-height: 30%;
     max-height: 50%;
     position: absolute;
@@ -17,7 +16,7 @@ body {
     left: 2.5%;
     background-color: #34495e;
     color: white; /*text color*/
-    padding: 10px;
+    padding: 2.5%;
     margin-bottom: 0;
     font-family: Arial, Helvetica, sans-serif;
     overflow: auto;
@@ -47,7 +46,7 @@ img:hover {
     width: 80%;
     position: relative; /* Position has to be relative for flex */
     left: var(--left_Text);
-    top: 0;
+    top: -30px;
     flex-grow: 1;
 }
 
