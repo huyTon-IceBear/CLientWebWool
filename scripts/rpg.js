@@ -48,7 +48,6 @@ function startDialogue() {
       token
     },
     success: function (result) {
-      // node = JSON.stringify(result);
       // node = {
       //   dialogue: result['dialogue'],
       //   node: result['node'],
@@ -85,9 +84,7 @@ function startDialogue() {
       //     }
       //   })
       // };
-      console.log(node);
       node = JSON.stringify(result);
-      console.log(node);
       node = JSON.parse(node);
       console.log(node);
 
@@ -131,6 +128,7 @@ function continueDialogue(id) {
 }
 
 function renderHTML() {
+  //Speaker name with text
   $(".text").append("<h2>" + node.speaker + "</h2>" + "<p>" + node.statement.segments[0].text + "</p>")
 
   let appendString = "";
@@ -142,23 +140,43 @@ function renderHTML() {
     if (reply.endsDialogue === true) {
       endsDialogue = true;
     }
-    console.log("i=" + i);
-    $.each(reply.statement.segments, function (j, segment) {
-      console.log("j=" + j);
-      if (segment.segmentType === TYPE.TEXT) {
-        tempString += segment.text;
-      } else if (segment.segmentType === TYPE.INPUT) {
-        tempString += `<input type="text" id=${segment.variableName}>`;
-        textOnly = false;
-        // $(".text").append("<input>" + node.item.text + "</input> <br>")
+
+    if (reply.statement === null && !endsDialogue) {
+      appendString += `<button type="button" class="button" id=${reply.replyId} onclick="continueDialogue(${reply.replyId})">CONTINUE</button>`;
+    } else {
+      $.each(reply.statement.segments, function (j, segment) {
+        console.log("j=" + j);
+        switch (segment.segmentType) {
+          case "TEXT":
+            tempString += segment.text;
+            break;
+          case "INPUT":
+            tempString += `<input type="text" id=${segment.variableName}>`;
+            textOnly = false;
+            break;
+          case "ACTION":
+            tempString += `<input type="text" id=${segment.variableName}>`;
+            textOnly = false;
+            break;
+          default:
+            tempString += "Something went wrong..."
+        }
+        // if (segment.segmentType === TYPE.TEXT) {
+        //   tempString += segment.text;
+        // } else if (segment.segmentType === TYPE.INPUT) {
+        //   tempString += `<input type="text" id=${segment.variableName}>`;
+        //   textOnly = false;
+        //   // $(".text").append("<input>" + node.item.text + "</input> <br>")
+        // }
+      });
+      console.log(tempString);
+      if (textOnly && !endsDialogue) {
+        appendString += `<button type="button" class="button" id=${reply.replyId} onclick="continueDialogue(${reply.replyId})">${tempString}</button>`;
+      } else if (!textOnly && !endsDialogue) {
+        appendString += tempString + `<button class="button" id=${reply.replyId}>SEND</button>`
+      } else if (endsDialogue) {
+        appendString += `<button class="button" id=${reply.replyId} onclick="endDialogue()">${tempString}</button>`
       }
-    });
-    if (textOnly && !endsDialogue) {
-      appendString += `<button type="button" class="button" id=${reply.replyId} onclick="continueDialogue(${reply.replyId})">${tempString}</button>`;
-    } else if (!textOnly && !endsDialogue) {
-      appendString += tempString + `<button class="button" id=${reply.replyId}>"SEND"</button>`
-    } else if (endsDialogue) {
-      appendString += `<button class="button" id=${reply.replyId} onclick="endDialogue()">${tempString}</button>`
     }
     appendString += "</p> ";
     $(".text").append(appendString);
