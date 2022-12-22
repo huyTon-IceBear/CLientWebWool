@@ -136,7 +136,7 @@ function renderHTML() {
   let endsDialogue = false;
   $.each(node.replies, function (i, reply) {
     let tempString = "";
-    appendString += "<p> ";
+    appendString = "<p> ";
     if (reply.endsDialogue === true) {
       endsDialogue = true;
     }
@@ -160,6 +160,7 @@ function renderHTML() {
             break;
           default:
             tempString += "Something went wrong..."
+            break;
         }
         // if (segment.segmentType === TYPE.TEXT) {
         //   tempString += segment.text;
@@ -171,11 +172,11 @@ function renderHTML() {
       });
       console.log(tempString);
       if (textOnly && !endsDialogue) {
-        appendString += `<button type="button" class="button" id=${reply.replyId} onclick="continueDialogue(${reply.replyId})">${tempString}</button>`;
+        appendString += `<button type="button" class="button" id=${reply.replyId} onclick=continueDialogue(${reply.replyId})>${tempString}</button>`;
       } else if (!textOnly && !endsDialogue) {
         appendString += tempString + `<button class="button" id=${reply.replyId}>SEND</button>`
       } else if (endsDialogue) {
-        appendString += `<button class="button" id=${reply.replyId} onclick="endDialogue()">${tempString}</button>`
+        appendString += `<button type="button" class="button" id=${reply.replyId} onclick=endDialogue()>${tempString}</button>`
       }
     }
     appendString += "</p> ";
