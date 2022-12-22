@@ -1,7 +1,6 @@
 .login-screen {
   width: 350px;
   height: 500px;
-  background: red;
   overflow: hidden;
   background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e) no-repeat
     center/ cover;
@@ -10,6 +9,14 @@
 }
 #chk {
   display: none;
+}
+#error-message {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: red;
 }
 .signup {
   position: relative;

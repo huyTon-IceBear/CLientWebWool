@@ -3,11 +3,11 @@ const template = document.createElement('template');
 template.innerHTML = `
     <link rel="stylesheet" href="wool/login/style.css"/>
     <div class="login-screen">
-    <input type="checkbox" id="chk" aria-hidden="true" />
-    <div class="signup">
+      <input type="checkbox" id="chk" aria-hidden="true" />
+      <div class="signup">
         <form>
           <label for="chk" aria-hidden="true">Sign up</label>
-          <input type="text" name="txt" placeholder="User name" required="" />
+          <input type="text" name="txt" placeholder="Username" required="" />
           <input type="email" name="email" placeholder="Email" required="" />
           <input
             type="password"
@@ -18,10 +18,10 @@ template.innerHTML = `
           <button>Sign up</button>
         </form>
       </div>
-      <div class="login" id="login_form">
-        <form>
+      <div class="login">
+        <form id="login">
           <label for="chk" aria-hidden="true">Login</label>
-          <input type="email" name="email" placeholder="Email" required="" />
+          <input type="user" name="user" placeholder="Username" required/>
           <input
             type="password"
             name="pswd"
@@ -33,6 +33,7 @@ template.innerHTML = `
             <span class="text"> Start Chatting </span>
             <span class="loading-animate"></span>
           </button>
+          <div id="error-message"></div>
         </form>
       </div>
     </div>
@@ -46,12 +47,19 @@ class LoginScreen extends HTMLElement {
   }
 
   connectedCallback() {
-    this.shadowRoot
-      .querySelector('#login_form')
-      .addEventListener('submit', (evt) => {
-        evt.preventDefault();
-      });
+    const form = this.shadowRoot.querySelector('#login');
+    form.addEventListener('submit', async (event) => {
+      if (form.checkValidity()) {
+        event.preventDefault();
+        const user = form.elements.user.value;
+        const password = form.elements.pswd.value;
+        await this.callLoginApi(user, password);
+        this.redirectToConversationPage();
+      }
+    });
+  }
 
+  redirectToConversationPage() {
     this.shadowRoot.querySelector('.btn').addEventListener('click', (evt) => {
       evt.target.classList.add('loading');
       setTimeout(() => {
@@ -61,6 +69,43 @@ class LoginScreen extends HTMLElement {
         window.location.href = 'login/index.html';
       }, 2000);
     });
+  }
+
+  async callLoginApi(user, password) {
+    try {
+      const response = await fetch('http://localhost:8080/wool/v1/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          user: user,
+          password: password,
+          tokenExpiration: 0,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      // Check for a successful status code
+      if (response.status < 200 || response.status >= 300) {
+        throw new Error(data?.message);
+      }
+
+      // Clear the error message
+      const errorMessage = this.shadowRoot.querySelector('#error-message');
+      errorMessage.innerText = '';
+
+      // login was successful
+      // store the authentication token (if provided by the API)
+      const token = data?.token;
+      sessionStorage.setItem('authToken', token);
+    } catch (error) {
+      // display the error message
+      console.log('error', error);
+      const errorMessage = this.shadowRoot.querySelector('#error-message');
+      errorMessage.innerText = error.message;
+    }
   }
 }
 
