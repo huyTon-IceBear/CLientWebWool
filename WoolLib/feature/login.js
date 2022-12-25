@@ -9,35 +9,15 @@ export async function Login(object) {
 }
 
 export async function Start(token) {
-  return new Promise((resolve, reject) => {
-    $.ajax({
-      url: "http://localhost:8080/wool/v1/dialogue/start",
-      type: "POST",
-      dataType: "json",
-      data: {
-        dialogueName: "basic",
-        language: "en",
-        timeZone: "Europe/Lisbon",
-      },
-      headers: { "X-Auth-Token": token },
-      success: function (res) {
-        resolve(res);
-      },
-      error: function (err) {
-        reject(err);
-      },
-    });
+  return $.ajax({
+    url: "http://localhost:8080/wool/v1/dialogue/start",
+    type: "POST",
+    dataType: "json",
+    data: {
+      dialogueName: "basic",
+      language: "en",
+      timeZone: "Europe/Lisbon",
+    },
+    headers: { "X-Auth-Token": token },
   });
 }
-
-// return $.ajax({
-//   url: "http://localhost:8080/wool/v1/dialogue/start",
-//   type: "POST",
-//   dataType: "json",
-//   data: {
-//     dialogueName: "basic",
-//     language: "en",
-//     timeZone: "Europe/Lisbon",
-//   },
-//   headers: { "X-Auth-Token": token },
-// });
