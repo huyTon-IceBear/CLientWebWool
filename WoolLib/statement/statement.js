@@ -1,4 +1,4 @@
-export class Statement extends HTMLElement {
+class Statement extends HTMLElement {
   constructor() {
     super();
     const stmt = document.createElement("div");
@@ -9,10 +9,12 @@ export class Statement extends HTMLElement {
 
     const linkElem = document.createElement("link");
     linkElem.setAttribute("rel", "stylesheet");
-    linkElem.setAttribute("href", "./WoolLib/convoComponent/statement/statement.css");
+    linkElem.setAttribute("href", "./WoolLib/UI/statement/statement.css");
 
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(stmt);
     shadowRoot.appendChild(linkElem);
   }
 }
+
+export default Statement;

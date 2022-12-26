@@ -1,4 +1,4 @@
-export class Ava extends HTMLElement {
+class Avatar extends HTMLElement {
   constructor() {
     super();
     const ava = document.createElement("img");
@@ -10,10 +10,12 @@ export class Ava extends HTMLElement {
 
     const linkElem = document.createElement("link");
     linkElem.setAttribute("rel", "stylesheet");
-    linkElem.setAttribute("href", "./WoolLib/convoComponent/ava/ava.css");
+    linkElem.setAttribute("href", "./WoolLib/UI/avatar/avatar.css");
 
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(ava);
     shadowRoot.appendChild(linkElem);
   }
 }
+
+export default Avatar;

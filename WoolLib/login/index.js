@@ -1,7 +1,7 @@
 const template = document.createElement('template');
 
 template.innerHTML = `
-    <link rel="stylesheet" href="WoolLib/UI/login/style.css"/>
+    <link rel="stylesheet" href="WoolLib/login/style.css"/>
     <div class="login-screen">
       <input type="checkbox" id="chk" aria-hidden="true" />
       <div class="signup">
@@ -29,7 +29,7 @@ template.innerHTML = `
             required=""
           />
           <button class="btn">
-            <img src="wool/assets/chat.svg" />
+            <img src="WoolLib/assets/chat.svg" />
             <span class="text"> Start Chatting </span>
             <span class="loading-animate"></span>
           </button>
@@ -66,7 +66,7 @@ class LoginScreen extends HTMLElement {
         setTimeout(() => {
           evt.target.classList.remove('loading');
         }, 1000);
-        window.location.href = 'login/index.html';
+        window.location.href = './test/instagramVer/insVer.html';
       }, 2000);
     });
   }

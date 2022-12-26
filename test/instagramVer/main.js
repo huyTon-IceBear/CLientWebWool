@@ -1,26 +1,30 @@
-import { AuthLogin } from "./main.js";
-
 let convoContainer = document.getElementsByClassName("container")[0];
 
 let token = "",
   statement = "",
   dialogueId = "",
   node = "";
-//apply Ava
-let ava = `<agent-ava></agent-ava>`;
+let ava = `<img src="https://img.icons8.com/external-linector-lineal-linector/64/null/external-avatar-man-avatar-linector-lineal-linector-6.png" class="ava">`;
 
 let content = [];
 let interactionId = 0;
 
-let object = {
-  user: "user",
-  password: "user",
-  tokenExpiration: 0,
-};
-
 window.onload = function () {
-  //apply Login function
-  AuthLogin(object);
+  $.ajax({
+    url: "http://localhost:8080/wool/v1/auth/login",
+    type: "POST",
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify({
+      user: "user",
+      password: "user",
+      tokenExpiration: 0,
+    }),
+    success: function (res) {
+      token = res.token;
+      startDialog();
+    },
+  });
 };
 
 function startDialog() {
@@ -42,9 +46,11 @@ function startDialog() {
 }
 
 function renderHTML() {
+  let agentStatement = "";
   let replies = "";
-  //apply Statement
-  let stmt = `<agent-stmt data-text="${statement}"></agent-stmt>`;
+
+  // agentStatement += `<div class="statement">${statement}</div>`;
+  agentStatement += `<agent-stmt></agent-stmt>`
 
   for (let i = 0; i < content.length; i++) {
     const r = content[i].statement?.segments[0].text || "Continue";
@@ -53,7 +59,7 @@ function renderHTML() {
 
   let repliesCtr = `<div class="reply-container">${replies}</div>`;
 
-  let data = `<div class="agent-data">${ava}<div>${stmt}${repliesCtr}</div></div>`;
+  let data = `<div class="agent-data">${ava}<div>${agentStatement}${repliesCtr}</div></div>`;
   convoContainer.insertAdjacentHTML("beforeend", data);
 
   for (let i = 0; i < content.length; i++) {
@@ -106,7 +112,6 @@ function progress(e) {
 }
 
 function getInfoNode(res) {
-  console.log(res);
   node = res.value?.node || res.node;
   statement =
     res.value?.statement.segments[0].text || res.statement.segments[0].text;
