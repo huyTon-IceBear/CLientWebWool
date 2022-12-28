@@ -10,7 +10,7 @@ class Avatar extends HTMLElement {
 
     const linkElem = document.createElement("link");
     linkElem.setAttribute("rel", "stylesheet");
-    linkElem.setAttribute("href", "./WoolLib/UI/avatar/avatar.css");
+    linkElem.setAttribute("href", "../../WoolLib/avatar/avatar.css");
 
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(ava);

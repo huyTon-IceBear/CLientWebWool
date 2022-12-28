@@ -9,7 +9,7 @@ class Statement extends HTMLElement {
 
     const linkElem = document.createElement("link");
     linkElem.setAttribute("rel", "stylesheet");
-    linkElem.setAttribute("href", "./WoolLib/UI/statement/statement.css");
+    linkElem.setAttribute("href", "../../WoolLib/statement/statement.css");
 
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(stmt);
