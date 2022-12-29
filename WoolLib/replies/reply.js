@@ -1,13 +1,17 @@
-export class Reply extends HTMLElement {
+class Reply extends HTMLElement {
   constructor() {
     super();
-    let stmt = document.createElement("div");
-    stmt.setAttribute("class", "statement");
+    let replies = document.createElement("div");
+    replies.setAttribute("class", "reply");
 
-    const text = this.getAttribute("data-text");
-    stmt.textContent = text;
+    const text = JSON.parse(this.getAttribute("data"));
+    // replies.textContent = text;
+
+    console.log(text);
 
     const shadowRoot = this.attachShadow({ mode: "open" });
-    shadowRoot.appendChild(stmt);
+    shadowRoot.appendChild(replies);
   }
 }
+
+export default Reply;

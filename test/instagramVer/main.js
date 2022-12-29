@@ -8,6 +8,8 @@ let token = "",
 let content = [];
 let interactionId = 0;
 
+let response;
+
 window.onload = function () {
   $.ajax({
     url: "http://localhost:8080/wool/v1/dialogue/start",
@@ -20,6 +22,7 @@ window.onload = function () {
     },
     headers: { "X-Auth-Token": sessionStorage.authToken },
     success: function (res) {
+      response = res;
       getInfoNode(res);
       renderHTML();
     },
@@ -29,6 +32,8 @@ window.onload = function () {
 function renderHTML() {
   let agentStatement = "";
   let replies = "";
+  const res = JSON.stringify(response);
+  console.log(res);
 
   agentStatement += `<agent-stmt data-text="${statement}"></agent-stmt>`
 
@@ -39,7 +44,8 @@ function renderHTML() {
 
   let repliesCtr = `<div class="reply-container">${replies}</div>`;
 
-  let data = `<div class="agent-data"><agent-ava></agent-ava><div>${agentStatement}${repliesCtr}</div></div>`;
+  let data = `<div class="agent-data"><agent-ava></agent-ava><div>${agentStatement}${repliesCtr}<node-replies data='${res}'></node-replies></div></div>`;
+  // debugger
   convoContainer.insertAdjacentHTML("beforeend", data);
 
   for (let i = 0; i < content.length; i++) {
