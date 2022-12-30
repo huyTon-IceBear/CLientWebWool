@@ -1,29 +1,83 @@
+let content, node, interactionId;
+
 class Reply extends HTMLElement {
   constructor() {
     super();
     let replies = document.createElement("div");
-    replies.setAttribute("class", "reply");
+    replies.setAttribute("class", "reply-container");
 
     const text = JSON.parse(this.getAttribute("data"));
-    const content = text.value?.replies || text.replies;
-    const node = text.value?.node || text.node;
-    const interactionId =
-    text.value?.loggedInteractionIndex || text.loggedInteractionIndex;
+    content = text.value?.replies || text.replies;
+    node = text.value?.node || text.node;
+    interactionId =
+      text.value?.loggedInteractionIndex || text.loggedInteractionIndex;
 
     if (content !== null) {
       for (let i = 0; i < content.length; i++) {
         const r = content[i].statement?.segments[0].text || "Continue";
-        console.log(r)
         replies.innerHTML += `<p class="${node}-${interactionId}-reply${i}">${r}</p>`;
+        console.log(replies);
       }
     }
 
+    const linkElem = document.createElement("link");
+    linkElem.setAttribute("rel", "stylesheet");
+    linkElem.setAttribute("href", "../../WoolLib/replies/reply.css");
+
     const shadowRoot = this.attachShadow({ mode: "open" });
     shadowRoot.appendChild(replies);
+    shadowRoot.appendChild(linkElem);
   }
 
-  connectedCallback(){
-    
+  connectedCallback() {
+    for (let i = 0; i < content.length; i++) {
+      const a = this.shadowRoot.querySelector(
+        `.${node}-${interactionId}-reply${i}`
+      );
+      console.log(a);
+      a.setAttribute("reply-id", content[i].replyId);
+      a.setAttribute("end-or-not", content[i].endsDialogue);
+      a.setAttribute("interaction", interactionId);
+
+      a.addEventListener("click", this.progress.bind(this));
+    }
+  }
+
+  async progress(e) {
+    e.preventDefault();
+    let id = parseInt(e.target.getAttribute("reply-id"));
+    let end = e.target.getAttribute("end-or-not");
+    let sameStep =
+      parseInt(e.target.getAttribute("interaction")) == interactionId;
+
+    if (sameStep) {
+      if (end === "true") {
+        convoContainer.insertAdjacentHTML(
+          "beforeend",
+          `<div class="end-dialogue">End Dialogue.</div>`
+        );
+        interactionId = -1;
+      } else {
+        const input = `<div class="user-data"><p class="user-${id}">${e.target.innerHTML}</p><agent-avatar></agent-avatar></div>`;
+        convoContainer.insertAdjacentHTML("beforeend", input);
+
+        await $.ajax({
+          url: "http://localhost:8080/wool/v1/dialogue/progress",
+          type: "POST",
+          dataType: "json",
+          data: {
+            loggedDialogueId: dialogueId,
+            loggedInteractionIndex: interactionId,
+            replyId: id,
+          },
+          headers: { "X-Auth-Token": sessionStorage.authToken },
+          success: function (res) {
+            this.dispatchEvent(new CustomEvent('data-received', { detail: res }));
+            // return res;
+          }.bind(this),
+        });
+      }
+    }
   }
 }
 
