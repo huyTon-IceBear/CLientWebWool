@@ -1,4 +1,4 @@
-let content, node, interactionId;
+let content, node, interactionId, dialogueId;
 
 class Reply extends HTMLElement {
   constructor() {
@@ -8,15 +8,17 @@ class Reply extends HTMLElement {
 
     const text = JSON.parse(this.getAttribute("data"));
     content = text.value?.replies || text.replies;
+    console.log(content);
     node = text.value?.node || text.node;
     interactionId =
       text.value?.loggedInteractionIndex || text.loggedInteractionIndex;
+    dialogueId = text.value?.loggedDialogueId || text.loggedDialogueId;
+    replies.setAttribute("id", interactionId);
 
     if (content !== null) {
       for (let i = 0; i < content.length; i++) {
         const r = content[i].statement?.segments[0].text || "Continue";
         replies.innerHTML += `<p class="${node}-${interactionId}-reply${i}">${r}</p>`;
-        console.log(replies);
       }
     }
 
@@ -34,7 +36,6 @@ class Reply extends HTMLElement {
       const a = this.shadowRoot.querySelector(
         `.${node}-${interactionId}-reply${i}`
       );
-      console.log(a);
       a.setAttribute("reply-id", content[i].replyId);
       a.setAttribute("end-or-not", content[i].endsDialogue);
       a.setAttribute("interaction", interactionId);
@@ -72,7 +73,9 @@ class Reply extends HTMLElement {
           },
           headers: { "X-Auth-Token": sessionStorage.authToken },
           success: function (res) {
-            this.dispatchEvent(new CustomEvent('data-received', { detail: res }));
+            this.dispatchEvent(
+              new CustomEvent("data-received", { detail: res })
+            );
             // return res;
           }.bind(this),
         });

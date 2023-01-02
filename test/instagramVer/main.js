@@ -1,8 +1,5 @@
 let convoContainer = document.getElementsByClassName("container")[0];
-
-let dialogueId = "";
 let interactionId = 0;
-let response;
 
 window.onload = function () {
   $.ajax({
@@ -16,33 +13,33 @@ window.onload = function () {
     },
     headers: { "X-Auth-Token": sessionStorage.authToken },
     success: function (res) {
-      response = res;
       getInfoNode(res);
-      renderHTML();
+      renderHTML(res);
     },
   });
 };
 
-function renderHTML() {
+function renderHTML(response) {
   const res = JSON.stringify(response);
   let agentStatement = `<agent-stmt data='${res}'></agent-stmt>`;
-  let replies = `<node-replies data='${res}'></node-replies>`;
+  let replies = `<node-replies class='step${interactionId}' data='${res}'></node-replies>`;
   let avatar = `<agent-avatar></agent-avatar>`;
 
   let data = `<div class="agent-data">${avatar}<div>${agentStatement}${replies}</div></div>`;
   convoContainer.insertAdjacentHTML("beforeend", data);
 
-  const re = document.querySelector("node-replies");
+  progress();
+}
+
+function progress() {
+  const re = document.querySelector(`node-replies.step${interactionId}`);
   re.addEventListener("data-received", (event) => {
-    //only work 1 time
-    response = event.detail;
     getInfoNode(event.detail);
-    renderHTML();
+    renderHTML(event.detail);
   });
 }
 
 function getInfoNode(res) {
-  dialogueId = res.value?.loggedDialogueId || res.loggedDialogueId;
   interactionId =
     res.value?.loggedInteractionIndex || res.loggedInteractionIndex;
 }
