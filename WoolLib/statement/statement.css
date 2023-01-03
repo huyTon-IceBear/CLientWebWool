@@ -1,0 +1,8 @@
+.wool-statement{
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    width: fit-content;
+    max-width: 60%;
+    background-color: beige;
+    padding: 0.4em 2.5em 0.4em 1em;
+    border-radius: 0.7em;
+}
