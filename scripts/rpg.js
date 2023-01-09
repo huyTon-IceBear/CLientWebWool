@@ -14,7 +14,7 @@ const token =
   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY3MDkzNTk0M30.AhChV8YNnP3k-TzRKmygQ9_FbITaPz1d36w1VbUlorkPrt060GNzKqH1XKNJ_4La2EsXPZbjIkrm116aIvtIbA';
 
 const data = {
-  dialogueName: 'basic',
+  dialogueName: 'test',
   language: 'en',
   timeZone: 'Europe/Amsterdam',
 };
@@ -32,6 +32,7 @@ const TYPE = {
 }
 
 let node;
+let lastSpeaker;
 
 $(document).ready(function () {
   startDialogue();
@@ -88,6 +89,8 @@ function startDialogue() {
       node = JSON.parse(node);
       console.log(node);
 
+      lastSpeaker = node.speaker;
+
       renderHTML();
     },
     error: function (err) {
@@ -138,6 +141,12 @@ function renderHTML() {
   //Speaker name with text
   $(".title").append("<h2>" + node.speaker + "</h2>" + "<p>" + node.statement.segments[0].text + "</p>")
 
+  if (lastSpeaker !== node.speaker) {
+    $(".avatar").attr("src","/img/cool-scrunch.png")
+  }
+
+  //TODO: needs better logic
+
   let appendString = "";
   let textOnly = true;
   let endsDialogue = false;
@@ -152,7 +161,7 @@ function renderHTML() {
       appendString += `<button type="button" class="button" id=${reply.replyId} onclick="continueDialogue(${reply.replyId})">CONTINUE</button>`;
     } else {
       $.each(reply.statement.segments, function (j, segment) {
-        console.log("j=" + j);
+        // console.log("j=" + j);
         switch (segment.segmentType) {
           case "TEXT":
             tempString += segment.text;
@@ -177,7 +186,7 @@ function renderHTML() {
         //   // $(".text").append("<input>" + node.item.text + "</input> <br>")
         // }
       });
-      console.log(tempString);
+      // console.log(tempString);
       if (textOnly && !endsDialogue) {
         appendString += `<button type="button" class="button" id=${reply.replyId} onclick=continueDialogue(${reply.replyId})>${tempString}</button>`;
       } else if (!textOnly && !endsDialogue) {
@@ -189,9 +198,11 @@ function renderHTML() {
     appendString += "</p> ";
     $(".text").append(appendString);
   });
+  lastSpeaker = node.speaker;
 }
 
 function endDialogue() {
+  $(".title").empty();
   $(".text").empty();
   $(".text").append("<h2>" + node.speaker + "</h2>" + "<p>You have finished the dialogue</p>");
 }
