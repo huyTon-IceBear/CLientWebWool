@@ -113,6 +113,7 @@ function continueDialogue(id) {
       token
     },
     success: function (result) {
+      $(".title").empty();
       $(".text").empty();
 
       node = JSON.stringify(result);
@@ -129,7 +130,7 @@ function continueDialogue(id) {
 
 function renderHTML() {
   //Speaker name with text
-  $(".text").append("<h2>" + node.speaker + "</h2>" + "<p>" + node.statement.segments[0].text + "</p>")
+  $(".title").append("<h2>" + node.speaker + "</h2>" + "<p>" + node.statement.segments[0].text + "</p>")
 
   let appendString = "";
   let textOnly = true;
@@ -181,7 +182,6 @@ function renderHTML() {
     }
     appendString += "</p> ";
     $(".text").append(appendString);
-    /* TODO: fix extra random item */
   });
 }
 
