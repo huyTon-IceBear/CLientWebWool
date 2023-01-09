@@ -1,17 +1,18 @@
-let convoContainer = document.getElementsByClassName("container")[0];
+let convoContainer = document.getElementsByClassName('container')[0];
 let interactionId = 0;
 
-window.onload = function () {
+window.onload = async function () {
+  const { config } = await import('../../WoolLib/config.js');
   $.ajax({
-    url: "http://localhost:8080/wool/v1/dialogue/start",
-    type: "POST",
-    dataType: "json",
+    url: config.baseUrl + config.port + '/wool/v1/dialogue/start',
+    type: 'POST',
+    dataType: 'json',
     data: {
-      dialogueName: "basic",
-      language: "en",
-      timeZone: "Europe/Lisbon",
+      dialogueName: 'basic',
+      language: 'en',
+      timeZone: 'Europe/Lisbon',
     },
-    headers: { "X-Auth-Token": sessionStorage.authToken },
+    headers: { 'X-Auth-Token': sessionStorage.authToken },
     success: function (res) {
       getInfoNode(res);
       renderHTML(res);
@@ -26,14 +27,13 @@ function renderHTML(response) {
   let avatar = `<agent-avatar></agent-avatar>`;
 
   let data = `<div class="agent-data">${avatar}<div>${agentStatement}${replies}</div></div>`;
-  convoContainer.insertAdjacentHTML("beforeend", data);
-
+  convoContainer.insertAdjacentHTML('beforeend', data);
   progress();
 }
 
 function progress() {
   const re = document.querySelector(`node-replies.step${interactionId}`);
-  re.addEventListener("data-received", (event) => {
+  re.addEventListener('data-received', (event) => {
     getInfoNode(event.detail);
     renderHTML(event.detail);
   });

@@ -1,4 +1,5 @@
 const template = document.createElement('template');
+import { config } from '../config.js';
 
 template.innerHTML = `
     <link rel="stylesheet" href="WoolLib/login/style.css"/>
@@ -42,6 +43,8 @@ template.innerHTML = `
 class LoginScreen extends HTMLElement {
   constructor() {
     super();
+    this.port = config.port;
+    this.baseUrl = config.baseUrl;
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
@@ -73,17 +76,20 @@ class LoginScreen extends HTMLElement {
 
   async callLoginApi(user, password) {
     try {
-      const response = await fetch('http://localhost:8080/wool/v1/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({
-          user: user,
-          password: password,
-          tokenExpiration: 0,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        this.baseUrl + this.port + '/wool/v1/auth/login',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            user: user,
+            password: password,
+            tokenExpiration: 0,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       const data = await response.json();
 
@@ -102,7 +108,6 @@ class LoginScreen extends HTMLElement {
       sessionStorage.setItem('authToken', token);
     } catch (error) {
       // display the error message
-      console.log('error', error);
       const errorMessage = this.shadowRoot.querySelector('#error-message');
       errorMessage.innerText = error.message;
     }
