@@ -89,11 +89,13 @@ function startDialogue() {
       console.log(node);
 
       renderHTML();
-
-      // $(".text").html("<h2>" + node.speaker + "</h2> <br>");
     },
     error: function (err) {
       console.log(err);
+
+      $(".title").empty();
+      $(".text").empty();
+      $(".text").append("Something went wrong :(");
     },
   });
 }
@@ -124,6 +126,10 @@ function continueDialogue(id) {
     },
     error: function (err) {
       console.log(err);
+
+      $(".title").empty();
+      $(".text").empty();
+      $(".text").append("Something went wrong :(");
     },
   })
 }
