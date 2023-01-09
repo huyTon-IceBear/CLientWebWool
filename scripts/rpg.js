@@ -14,7 +14,7 @@ const token =
   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY3MDkzNTk0M30.AhChV8YNnP3k-TzRKmygQ9_FbITaPz1d36w1VbUlorkPrt060GNzKqH1XKNJ_4La2EsXPZbjIkrm116aIvtIbA';
 
 const data = {
-  dialogueName: 'test',
+  dialogueName: 'basic',
   language: 'en',
   timeZone: 'Europe/Amsterdam',
 };
@@ -25,14 +25,9 @@ let dateContinue = {
   replyId: 0,
 }
 
-const TYPE = {
-  TEXT: "TEXT",
-  INPUT: "INPUT",
-  ACTION: "ACTION"
-}
-
 let node;
 let lastSpeaker;
+let speakers = [];
 
 $(document).ready(function () {
   startDialogue();
@@ -90,6 +85,7 @@ function startDialogue() {
       console.log(node);
 
       lastSpeaker = node.speaker;
+      speakers.push({name: node.speaker, speaking: true});
 
       renderHTML();
     },
@@ -139,12 +135,20 @@ function continueDialogue(id) {
 
 function renderHTML() {
   //Speaker name with text
-  $(".title").append("<h2>" + node.speaker + "</h2>" + "<p>" + node.statement.segments[0].text + "</p>")
+  $(".title").append("<h2>" + node.speaker + "</h2>" + "<p>" + node.statement.segments[0].text + "</p>");
 
-  if (lastSpeaker !== node.speaker) {
-    $(".avatar").attr("src","/img/cool-scrunch.png")
+  if (!speakers.includes(node.speaker)) {
+    for (let i = 0; i < speakers.length; i++) {
+      speakers[i].speaking = false;
+    }
+    speakers.push({name: node.speaker, speaking: true});
   }
 
+  if (speakers[0].name === node.speaker) {
+    $(".avatar").attr("src","/img/ricardo cat.png");
+  } else {
+    $(".avatar").attr("src","/img/cool-scrunch.png");
+  }
   //TODO: needs better logic
 
   let appendString = "";
