@@ -3,6 +3,12 @@ let interactionId = 0;
 
 window.onload = async function () {
   const { config } = await import('../../WoolLib/config.js');
+  const { cookies } = await import('../../WoolLib/cookies/index.js');
+  let condition = sessionStorage.cookies;
+  let token = condition
+    ? cookies.getCookies('authToken')
+    : sessionStorage.authToken;
+
   $.ajax({
     url: config.baseUrl + config.port + '/wool/v1/dialogue/start',
     type: 'POST',
@@ -12,7 +18,7 @@ window.onload = async function () {
       language: 'en',
       timeZone: 'Europe/Lisbon',
     },
-    headers: { 'X-Auth-Token': sessionStorage.authToken },
+    headers: { 'X-Auth-Token': token },
     success: function (res) {
       getInfoNode(res);
       renderHTML(res);
