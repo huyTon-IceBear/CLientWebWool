@@ -1,5 +1,6 @@
 const template = document.createElement('template');
-
+import { config } from '../config.js';
+import { cookies } from '../cookies/index.js';
 template.innerHTML = `
     <link rel="stylesheet" href="WoolLib/login/style.css"/>
     <div class="login-screen">
@@ -33,6 +34,10 @@ template.innerHTML = `
             <span class="text"> Start Chatting </span>
             <span class="loading-animate"></span>
           </button>
+          <div class="checkbox-container">
+            <input class="checkbox" type="checkbox" id="my-checkbox">
+            <p >Remember Me?</p>
+          </div>
           <div id="error-message"></div>
         </form>
       </div>
@@ -42,6 +47,8 @@ template.innerHTML = `
 class LoginScreen extends HTMLElement {
   constructor() {
     super();
+    this.port = config.port;
+    this.baseUrl = config.baseUrl;
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
@@ -73,17 +80,20 @@ class LoginScreen extends HTMLElement {
 
   async callLoginApi(user, password) {
     try {
-      const response = await fetch('http://localhost:8080/wool/v1/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({
-          user: user,
-          password: password,
-          tokenExpiration: 0,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        this.baseUrl + this.port + '/wool/v1/auth/login',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            user: user,
+            password: password,
+            tokenExpiration: 0,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       const data = await response.json();
 
@@ -99,10 +109,19 @@ class LoginScreen extends HTMLElement {
       // login was successful
       // store the authentication token (if provided by the API)
       const token = data?.token;
-      sessionStorage.setItem('authToken', token);
+
+      const checkbox = this.shadowRoot.querySelector('#my-checkbox');
+      const checked = checkbox.checked;
+
+      if (checked) {
+        cookies.setCookies('authToken', token, 1);
+        sessionStorage.setItem('cookies', true);
+      } else {
+        sessionStorage.setItem('authToken', token);
+        sessionStorage.setItem('cookies', false);
+      }
     } catch (error) {
       // display the error message
-      console.log('error', error);
       const errorMessage = this.shadowRoot.querySelector('#error-message');
       errorMessage.innerText = error.message;
     }
