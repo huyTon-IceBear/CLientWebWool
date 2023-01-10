@@ -49,11 +49,20 @@ img:hover {
 }
 .title {
     width: 70%;
+    height: 100%;
     float: right;
     position: relative;
     margin-left: 15%;
+    /*overflow: hidden;*/
     top: -150px;
+    /*animation: typing 3s;*/
 }
+
+/*!* The typing effect *!*/
+/*@keyframes typing {*/
+/*    from { width: 0 }*/
+/*    to { width: 100% }*/
+/*}*/
 
 .text {
     width: 60%;
