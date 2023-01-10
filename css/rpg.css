@@ -23,7 +23,7 @@ body {
     bottom: 2.5%;
     left: 2.5%;
     right: 2.5%;
-    background-color: #34495e;
+    /*background-color: #34495e;*/
     color: white; /*text color*/
     padding: 2.5%;
     margin: 0 auto;
@@ -32,10 +32,11 @@ body {
     display: flex;
     flex-direction: column;
     border: gainsboro 8px inset;
+    background-image: linear-gradient(to bottom right, #34495e, #4c6886);
 }
 
 .avatar {
-    border: 2px solid #ddd;
+    border: gainsboro 2px inset;
     border-radius: 4px;
     padding: 2px;
     /*position: relative; !* Position has to be absolute *!*/
