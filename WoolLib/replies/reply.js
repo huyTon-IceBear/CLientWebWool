@@ -67,9 +67,10 @@ class Reply extends HTMLElement {
         convoContainer.insertAdjacentHTML('beforeend', input);
 
         let condition = sessionStorage.cookies;
-        let token = condition
-          ? cookies.getCookies('authToken')
-          : sessionStorage.authToken;
+        let token =
+          condition == true
+            ? cookies.getCookies('authToken')
+            : sessionStorage.authToken;
 
         await $.ajax({
           url: this.baseUrl + this.port + '/wool/v1/dialogue/progress',

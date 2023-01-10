@@ -5,9 +5,10 @@ window.onload = async function () {
   const { config } = await import('../../WoolLib/config.js');
   const { cookies } = await import('../../WoolLib/cookies/index.js');
   let condition = sessionStorage.cookies;
-  let token = condition
-    ? cookies.getCookies('authToken')
-    : sessionStorage.authToken;
+  let token =
+    condition == true
+      ? cookies.getCookies('authToken')
+      : sessionStorage.authToken;
 
   $.ajax({
     url: config.baseUrl + config.port + '/wool/v1/dialogue/start',
