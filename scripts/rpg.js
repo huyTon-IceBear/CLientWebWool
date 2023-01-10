@@ -208,5 +208,5 @@ function renderHTML() {
 function endDialogue() {
   $(".title").empty();
   $(".text").empty();
-  $(".text").append("<h2>" + node.speaker + "</h2>" + "<p>You have finished the dialogue</p>");
+  $(".title").append("<h2>" + node.speaker + "</h2>" + "<p>You have finished the dialogue</p>");
 }
