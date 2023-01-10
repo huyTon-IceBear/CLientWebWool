@@ -68,7 +68,7 @@ class Reply extends HTMLElement {
 
         let condition = sessionStorage.cookies;
         let token =
-          condition == true
+          condition == 'true'
             ? cookies.getCookies('authToken')
             : sessionStorage.authToken;
 
