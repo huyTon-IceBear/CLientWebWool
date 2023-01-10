@@ -1,5 +1,7 @@
 let content, node, interactionId, dialogueId;
 import { config } from '../config.js';
+import { cookies } from '../cookies/index.js';
+
 class Reply extends HTMLElement {
   constructor() {
     super();
@@ -64,8 +66,13 @@ class Reply extends HTMLElement {
         const input = `<div class="user-data"><p class="user-${id}">${e.target.innerHTML}</p><agent-avatar></agent-avatar></div>`;
         convoContainer.insertAdjacentHTML('beforeend', input);
 
+        let condition = sessionStorage.cookies;
+        let token = condition
+          ? cookies.getCookies('authToken')
+          : sessionStorage.authToken;
+
         await $.ajax({
-          url: this.baseUrl + port + '/wool/v1/dialogue/progress',
+          url: this.baseUrl + this.port + '/wool/v1/dialogue/progress',
           type: 'POST',
           dataType: 'json',
           data: {
@@ -73,7 +80,7 @@ class Reply extends HTMLElement {
             loggedInteractionIndex: interactionId,
             replyId: id,
           },
-          headers: { 'X-Auth-Token': sessionStorage.authToken },
+          headers: { 'X-Auth-Token': token },
           success: function (res) {
             this.dispatchEvent(
               new CustomEvent('data-received', { detail: res })

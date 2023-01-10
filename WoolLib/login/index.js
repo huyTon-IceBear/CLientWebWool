@@ -1,6 +1,6 @@
 const template = document.createElement('template');
 import { config } from '../config.js';
-
+import { cookies } from '../cookies/index.js';
 template.innerHTML = `
     <link rel="stylesheet" href="WoolLib/login/style.css"/>
     <div class="login-screen">
@@ -34,6 +34,10 @@ template.innerHTML = `
             <span class="text"> Start Chatting </span>
             <span class="loading-animate"></span>
           </button>
+          <div class="checkbox-container">
+            <input class="checkbox" type="checkbox" id="my-checkbox">
+            <p >Remember Me?</p>
+          </div>
           <div id="error-message"></div>
         </form>
       </div>
@@ -105,7 +109,17 @@ class LoginScreen extends HTMLElement {
       // login was successful
       // store the authentication token (if provided by the API)
       const token = data?.token;
-      sessionStorage.setItem('authToken', token);
+
+      const checkbox = this.shadowRoot.querySelector('#my-checkbox');
+      const checked = checkbox.checked;
+
+      if (checked) {
+        cookies.setCookies('authToken', token, 1);
+        sessionStorage.setItem('cookies', true);
+      } else {
+        sessionStorage.setItem('authToken', token);
+        sessionStorage.setItem('cookies', false);
+      }
     } catch (error) {
       // display the error message
       const errorMessage = this.shadowRoot.querySelector('#error-message');
