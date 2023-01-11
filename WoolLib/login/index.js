@@ -2,7 +2,7 @@ const template = document.createElement('template');
 import { config } from '../config.js';
 import { cookies } from '../cookies/index.js';
 template.innerHTML = `
-    <link rel="stylesheet" href="WoolLib/login/style.css"/>
+    <link rel="stylesheet" href="/WoolLib/login/style.css"/>
     <div class="login-screen">
       <input type="checkbox" id="chk" aria-hidden="true" />
       <div class="signup">
