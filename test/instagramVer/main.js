@@ -2,8 +2,8 @@ let convoContainer = document.getElementsByClassName('container')[0];
 let interactionId = 0;
 
 window.onload = async function () {
-  const { config } = await import('../../WoolLib/config.js');
-  const { cookies } = await import('../../WoolLib/cookies/index.js');
+  const { config } = await import('/WoolLib/config.js');
+  const { cookies } = await import('/WoolLib/cookies/index.js');
   let condition = sessionStorage.cookies;
   let token =
     condition == 'true'

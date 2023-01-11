@@ -28,7 +28,7 @@ class Reply extends HTMLElement {
 
     const linkElem = document.createElement('link');
     linkElem.setAttribute('rel', 'stylesheet');
-    linkElem.setAttribute('href', '../../WoolLib/replies/reply.css');
+    linkElem.setAttribute('href', '/WoolLib/replies/reply.css');
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(replies);
