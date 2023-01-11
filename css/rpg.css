@@ -98,17 +98,40 @@ body {
     box-shadow: 0px 0 5px 5px rgba(255,255,255,0.2);
 }
 
-@media screen and (max-width: 400px) {
+@media only screen and (max-width: 420px) {
     body {
-        background-color: #444444;
-        background-image: url(../img/background-rpg.png);
-        background-repeat: no-repeat;
-        background-size: 50%;
-        margin: 0;
+        background-size: 200%;
     }
 
     .textBox {
         width: 100%;
         height: 50%;
+        bottom: 0;
+        left: 0;
+        right: 0;
     }
+
+    .avatar {
+        border: gainsboro 2px inset;
+        border-radius: 4px;
+        padding: 2px;
+        /*position: relative; !* Position has to be absolute *!*/
+        max-width: 30%;
+        max-height: 30%;
+        float: left;
+    }
+
+    .title {
+        width: 65%;
+        margin-left: 35%;
+        top: -110px;
+    }
+
+    .text {
+        width: 60%;
+        align-self: center;
+        float: none;
+        top: -110px;
+    }
+
 }
