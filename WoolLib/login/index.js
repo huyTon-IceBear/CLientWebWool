@@ -73,7 +73,7 @@ class LoginScreen extends HTMLElement {
         setTimeout(() => {
           evt.target.classList.remove('loading');
         }, 1000);
-        window.location.href = './test/instagramVer/insVer.html';
+        window.location.href = '../WoolLib/rpg/rpg-conversation.js';
       }, 2000);
     });
   }
