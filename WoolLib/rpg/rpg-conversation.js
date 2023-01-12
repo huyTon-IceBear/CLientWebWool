@@ -2,11 +2,11 @@ const template = document.createElement('template');
 import { config } from '../config.js';
 import { cookies } from '../cookies/index.js';
 template.innerHTML = `
-    <link rel="stylesheet" href="/WoolLib/conversation/style.css"/>
+    <link rel="stylesheet" href="../WoolLib/rpg/rpg.css" />
     <div class="conversation-container" id="conversation" />
 `;
 
-class ConversationScreen extends HTMLElement {
+class RPGConversationScreen extends HTMLElement {
     constructor() {
         super();
         this.port = config.port;

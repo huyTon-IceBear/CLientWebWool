@@ -35,7 +35,7 @@ body {
     background-image: linear-gradient(to bottom right, #34495e, #4c6786);
 }
 
-.agent-avatar {
+.avatar {
     border: gainsboro 2px inset;
     border-radius: 4px;
     padding: 2px;
@@ -45,7 +45,7 @@ body {
     float: left;
 }
 
-.agent-stmt {
+.title {
     width: 70%;
     height: 100%;
     float: right;
@@ -62,7 +62,7 @@ body {
 /*    to { width: 100% }*/
 /*}*/
 
-.node-replies {
+.text {
     width: 60%;
     position: relative; /* Position has to be relative for flex */
     /*left: var(--left_Text);*/
@@ -111,7 +111,7 @@ body {
         right: 0;
     }
 
-    .agent-avatar {
+    .avatar {
         border: gainsboro 2px inset;
         border-radius: 4px;
         padding: 2px;
@@ -121,13 +121,13 @@ body {
         float: left;
     }
 
-    .agent-stmt {
+    .title {
         width: 65%;
         margin-left: 35%;
         top: -110px;
     }
 
-    .node-replies {
+    .text {
         width: 60%;
         align-self: center;
         float: none;
