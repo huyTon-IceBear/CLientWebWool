@@ -2,7 +2,7 @@ const template = document.createElement('template');
 import { config } from '../config.js';
 import { cookies } from '../cookies/index.js';
 template.innerHTML = `
-    <link rel="stylesheet" href="WoolLib/conversation/style.css"/>
+    <link rel="stylesheet" href="/WoolLib/conversation/style.css"/>
     <div class="conversation-container" id="conversation" />
 `;
 
@@ -12,12 +12,14 @@ class ConversationScreen extends HTMLElement {
     this.port = config.port;
     this.baseUrl = config.baseUrl;
     this.interactionId = 0;
+    this.convoContainer;
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
 
   async connectedCallback() {
     console.log('Custom square element added to page.');
+    this.convoContainer = this.shadowRoot.querySelector('#conversation');
     await this.startDialogue();
   }
 
@@ -27,46 +29,50 @@ class ConversationScreen extends HTMLElement {
       condition == 'true'
         ? cookies.getCookies('authToken')
         : sessionStorage.authToken;
-    $.ajax({
-      url: this.baseUrl + this.port + '/wool/v1/dialogue/start',
-      type: 'POST',
-      dataType: 'json',
-      data: {
-        dialogueName: 'basic',
-        language: 'en',
-        timeZone: 'Europe/Lisbon',
+
+    const formData = new FormData();
+    formData.append('dialogueName', 'basic');
+    formData.append('language', 'en');
+    formData.append('timeZone', 'Europe/Lisbon');
+
+    await fetch(this.baseUrl + this.port + '/wool/v1/dialogue/start', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-Auth-Token': token,
       },
-      headers: { 'X-Auth-Token': token },
-      success: function (res) {
-        getInfoNode(res);
-        renderHTML(res);
-      },
+    }).then(async (response) => {
+      let res = await response.json();
+      this.getInfoNode(res);
+      this.renderHTML(res);
     });
   }
 
   renderHTML(response) {
-    const convoContainer = this.shadowRoot.querySelector('#conversation');
+    // const convoContainer = this.shadowRoot.querySelector('#conversation');
     const res = JSON.stringify(response);
     let agentStatement = `<agent-stmt data='${res}'></agent-stmt>`;
     let replies = `<node-replies class='step${this.interactionId}' data='${res}'></node-replies>`;
     let avatar = `<agent-avatar></agent-avatar>`;
 
     let data = `<div class="agent-data">${avatar}<div>${agentStatement}${replies}</div></div>`;
-    convoContainer.insertAdjacentHTML('beforeend', data);
-    progress();
+    this.convoContainer.insertAdjacentHTML('beforeend', data);
+    this.progress();
   }
 
   progress() {
-    const re = document.querySelector(`node-replies.step${this.interactionId}`);
+    const re = this.shadowRoot.querySelector(
+      `node-replies.step${this.interactionId}`
+    );
     re.addEventListener('data-received', (event) => {
-      getInfoNode(event.detail);
-      renderHTML(event.detail);
+      this.getInfoNode(event?.detail);
+      this.renderHTML(event?.detail);
     });
   }
 
   getInfoNode(res) {
     this.interactionId =
-      res.value?.loggedInteractionIndex || res.loggedInteractionIndex;
+      res.value?.loggedInteractionIndex || res?.loggedInteractionIndex;
   }
 }
 

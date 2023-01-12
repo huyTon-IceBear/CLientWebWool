@@ -11,24 +11,24 @@ class Reply extends HTMLElement {
     replies.setAttribute('class', 'reply-container');
 
     const text = JSON.parse(this.getAttribute('data'));
-    content = text.value?.replies || text.replies;
-    console.log(content);
-    node = text.value?.node || text.node;
+    content = text?.value?.replies || text?.replies;
+    console.log('content', content);
+    node = text?.value?.node || text?.node;
     interactionId =
-      text.value?.loggedInteractionIndex || text.loggedInteractionIndex;
-    dialogueId = text.value?.loggedDialogueId || text.loggedDialogueId;
+      text?.value?.loggedInteractionIndex || text?.loggedInteractionIndex;
+    dialogueId = text?.value?.loggedDialogueId || text?.loggedDialogueId;
     replies.setAttribute('id', interactionId);
 
     if (content !== null) {
-      for (let i = 0; i < content.length; i++) {
-        const r = content[i].statement?.segments[0].text || 'Continue';
+      for (let i = 0; i < content?.length; i++) {
+        const r = content?.[i]?.statement?.segments?.[0]?.text || 'Continue';
         replies.innerHTML += `<p class="${node}-${interactionId}-reply${i}">${r}</p>`;
       }
     }
 
     const linkElem = document.createElement('link');
     linkElem.setAttribute('rel', 'stylesheet');
-    linkElem.setAttribute('href', '../../WoolLib/replies/reply.css');
+    linkElem.setAttribute('href', '/WoolLib/replies/reply.css');
 
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.appendChild(replies);
@@ -36,12 +36,12 @@ class Reply extends HTMLElement {
   }
 
   connectedCallback() {
-    for (let i = 0; i < content.length; i++) {
+    for (let i = 0; i < content?.length; i++) {
       const a = this.shadowRoot.querySelector(
         `.${node}-${interactionId}-reply${i}`
       );
-      a.setAttribute('reply-id', content[i].replyId);
-      a.setAttribute('end-or-not', content[i].endsDialogue);
+      a.setAttribute('reply-id', content?.[i]?.replyId);
+      a.setAttribute('end-or-not', content?.[i]?.endsDialogue);
       a.setAttribute('interaction', interactionId);
 
       a.addEventListener('click', this.progress.bind(this));
@@ -54,6 +54,26 @@ class Reply extends HTMLElement {
     let end = e.target.getAttribute('end-or-not');
     let sameStep =
       parseInt(e.target.getAttribute('interaction')) == interactionId;
+
+    const currentShadowRoot = this.shadowRoot.querySelector(
+      'div.reply-container'
+    );
+    console.log('currentShadowRoot', currentShadowRoot);
+    const parentShadowRoot = currentShadowRoot.host.shadowRoot;
+    console.log('parentShadowRoot', parentShadowRoot);
+
+    // let ancestorShadowRoot = currentShadowRoot;
+    // while (ancestorShadowRoot.host) {
+    //   ancestorShadowRoot = ancestorShadowRoot.host.shadowRoot;
+    //   // check if ancestorShadowRoot is null before proceeding.
+    // }
+    // console.log('ancestorShadowRoot', ancestorShadowRoot);
+
+    const elementInParentShadowRoot = parentShadowRoot.querySelector(
+      'conversation-container'
+    );
+
+    console.log('convoContainer', elementInParentShadowRoot);
 
     if (sameStep) {
       if (end === 'true') {

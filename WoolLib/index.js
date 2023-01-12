@@ -2,7 +2,7 @@ import Avatar from './avatar/avatar.js';
 import Statement from './statement/statement.js';
 import LoginScreen from './login/index.js';
 import Reply from './replies/reply.js';
-import ConversationScreen from './conversation/index.js';
+import ConversationScreen from './conversation/conversation.js';
 
 customElements.define('agent-avatar', Avatar);
 customElements.define('agent-stmt', Statement);
