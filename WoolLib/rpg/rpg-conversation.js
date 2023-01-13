@@ -2,7 +2,7 @@ const template = document.createElement('template');
 import { config } from '../config.js';
 import { cookies } from '../cookies/index.js';
 template.innerHTML = `
-    <link rel="stylesheet" href="../WoolLib/rpg/rpg.css" />
+    <link rel="stylesheet" href="../rpg/rpg.css" />
     <div class="conversation-container" id="conversation" />
 `;
 
@@ -75,3 +75,5 @@ class RPGConversationScreen extends HTMLElement {
             res.value?.loggedInteractionIndex || res?.loggedInteractionIndex;
     }
 }
+
+export default RPGConversationScreen;
