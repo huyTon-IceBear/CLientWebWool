@@ -133,22 +133,47 @@ function continueDialogue(id) {
   })
 }
 
-function renderHTML() {
-  //Speaker name with text
-  $(".title").append("<h2>" + node.speaker + "</h2>" + "<p>" + node.statement.segments[0].text + "</p>");
+let i = 0;
+let split = false;
 
-  if (!speakers.includes(node.speaker)) {
-    for (let i = 0; i < speakers.length; i++) {
-      speakers[i].speaking = false;
+function typeWriter() {
+  let txt = node.speaker + "|" + node.statement.segments[0].text;
+  console.log(txt)
+  $(".title").append("<h2 id='name'></h2>" + "<p id='dialogue'></p>")
+  if (i < txt.length) {
+    if (txt.charAt(i) === "|") {
+      split = true;
+      i++;
     }
-    speakers.push({name: node.speaker, speaking: true});
-  }
 
-  if (speakers[0].name === node.speaker) {
-    $(".avatar").attr("src","/img/ricardo cat.png");
-  } else {
-    $(".avatar").attr("src","/img/cool-scrunch.png");
+    if (!split) {
+      document.getElementById("name").innerHTML += txt.charAt(i);
+    } else {
+      document.getElementById("dialogue").innerHTML += txt.charAt(i);
+    }
+
+    i++;
+    setTimeout(typeWriter, 50);
   }
+}
+
+function renderHTML() {
+  typeWriter();
+  //Speaker name with text
+  // $(".title").append("<h2 id='name'>" + node.speaker + "</h2>" + "<p id='dialogue'>" + node.statement.segments[0].text + "</p>");
+
+  // if (!speakers.includes(node.speaker)) {
+  //   for (let i = 0; i < speakers.length; i++) {
+  //     speakers[i].speaking = false;
+  //   }
+  //   speakers.push({name: node.speaker, speaking: true});
+  // }
+  //
+  // if (speakers[0].name === node.speaker) {
+  //   $(".avatar").attr("src","/img/ricardo-cat.png");
+  // } else {
+  //   $(".avatar").attr("src","/img/cool-scrunch.png");
+  // }
   //TODO: needs better logic
 
   let appendString = "";
