@@ -44,42 +44,6 @@ function startDialogue() {
       token
     },
     success: function (result) {
-      // node = {
-      //   dialogue: result['dialogue'],
-      //   node: result['node'],
-      //   speaker: result['speaker'],
-      //   loggedDialogueId: result['loggedDialogueId'],
-      //   loggedInteractionIndex: result['loggedInteractionIndex'],
-      //   mainText: result['statement']['segments'][0]['text'],
-      //   replies: $.each(result['replies'], function (i, reply) {
-      //     return {
-      //       replyId: reply['replyId'],
-      //       endsDialogue: reply['endDialogue'],
-      //       statement: {
-      //         segments: $.each(reply['statement']['segments'], function (j, segment) {
-      //           let type = segment['segmentType']
-      //           if (type === "TEXT") {
-      //             return {
-      //               segmentType: TYPE.TEXT,
-      //               text: segment['text']
-      //             }
-      //           } else if (type === "INPUT") {
-      //             return {
-      //               segmentType: TYPE.INPUT,
-      //               inputType: segment['inputType'],
-      //               variableName: segment['variableName']
-      //             }
-      //           } else {
-      //             return {
-      //               replyId: segment['replyId'],
-      //               statement: segment['statement'],
-      //             }
-      //           }
-      //         })
-      //       }
-      //     }
-      //   })
-      // };
       node = JSON.stringify(result);
       node = JSON.parse(node);
       console.log(node);
@@ -114,9 +78,6 @@ function continueDialogue(id) {
       token
     },
     success: function (result) {
-      $(".title").empty();
-      $(".text").empty();
-
       node = JSON.stringify(result);
       node = JSON.parse(node)['value'];
       console.log(node);
@@ -133,33 +94,40 @@ function continueDialogue(id) {
   })
 }
 
-let i = 0;
+let t = 0;
 let split = false;
 
 function typeWriter() {
+
   let txt = node.speaker + "|" + node.statement.segments[0].text;
   console.log(txt)
   $(".title").append("<h2 id='name'></h2>" + "<p id='dialogue'></p>")
-  if (i < txt.length) {
-    if (txt.charAt(i) === "|") {
+
+  if (t < txt.length) {
+    if (txt.charAt(t) === "|") {
       split = true;
-      i++;
+      t++;
     }
-
     if (!split) {
-      document.getElementById("name").innerHTML += txt.charAt(i);
+      document.getElementById("name").innerHTML += txt.charAt(t);
     } else {
-      document.getElementById("dialogue").innerHTML += txt.charAt(i);
+      document.getElementById("dialogue").innerHTML += txt.charAt(t);
     }
-
-    i++;
-    setTimeout(typeWriter, 50);
+    t++;
+    setTimeout(typeWriter, 25);
   }
+  //TODO: needs more logic for when the next dialogue comes
 }
 
 function renderHTML() {
+  $(".title").empty();
+  $(".text").empty();
+
+  t = 0;
+  split = false;
+  
   typeWriter();
-  //Speaker name with text
+  // Speaker name with text
   // $(".title").append("<h2 id='name'>" + node.speaker + "</h2>" + "<p id='dialogue'>" + node.statement.segments[0].text + "</p>");
 
   // if (!speakers.includes(node.speaker)) {
@@ -185,7 +153,7 @@ function renderHTML() {
     if (reply.endsDialogue === true) {
       endsDialogue = true;
     }
-
+    // console.log("i=" + i);
     if (reply.statement === null && !endsDialogue) {
       appendString += `<button type="button" class="button" id=${reply.replyId} onclick="continueDialogue(${reply.replyId})">CONTINUE</button>`;
     } else {
@@ -235,3 +203,40 @@ function endDialogue() {
   $(".text").empty();
   $(".title").append("<h2>" + node.speaker + "</h2>" + "<p>You have finished the dialogue</p>");
 }
+
+// node = {
+//   dialogue: result['dialogue'],
+//   node: result['node'],
+//   speaker: result['speaker'],
+//   loggedDialogueId: result['loggedDialogueId'],
+//   loggedInteractionIndex: result['loggedInteractionIndex'],
+//   mainText: result['statement']['segments'][0]['text'],
+//   replies: $.each(result['replies'], function (i, reply) {
+//     return {
+//       replyId: reply['replyId'],
+//       endsDialogue: reply['endDialogue'],
+//       statement: {
+//         segments: $.each(reply['statement']['segments'], function (j, segment) {
+//           let type = segment['segmentType']
+//           if (type === "TEXT") {
+//             return {
+//               segmentType: TYPE.TEXT,
+//               text: segment['text']
+//             }
+//           } else if (type === "INPUT") {
+//             return {
+//               segmentType: TYPE.INPUT,
+//               inputType: segment['inputType'],
+//               variableName: segment['variableName']
+//             }
+//           } else {
+//             return {
+//               replyId: segment['replyId'],
+//               statement: segment['statement'],
+//             }
+//           }
+//         })
+//       }
+//     }
+//   })
+// };

@@ -12,14 +12,12 @@ class RPGConversationScreen extends HTMLElement {
         this.port = config.port;
         this.baseUrl = config.baseUrl;
         this.interactionId = 0;
-        this.convoContainer;
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
 
     async connectedCallback() {
         console.log('Custom square element added to page.');
-        this.convoContainer = this.shadowRoot.querySelector('#conversation');
         await this.startDialogue();
     }
 

@@ -47,7 +47,7 @@ body {
 }
 
 .title {
-    width: 0;
+    width: 65%;
     height: 100%;
     float: right;
     position: relative;
@@ -55,13 +55,13 @@ body {
     /*overflow: hidden;*/
     top: -150px;
     /*animation: typing 3s;*/
-    animation: typing 3s steps(40, end) forwards;
+    /*animation: typing 3s steps(40, end) forwards;*/
 }
 
-@keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
-}
+/*@keyframes typing {*/
+/*    from { width: 0 }*/
+/*    to { width: 100% }*/
+/*}*/
 
 /*!* The typing effect *!*/
 /*@keyframes typing {*/
