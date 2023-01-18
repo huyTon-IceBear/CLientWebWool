@@ -31,6 +31,9 @@ let speakers = [];
 
 $(document).ready(function () {
   startDialogue();
+  $(".textBox").click(function () {
+    finish = true;
+  });
 })
 
 function startDialogue() {
@@ -95,10 +98,10 @@ function continueDialogue(id) {
 }
 
 let t = 0;
-let split = false;
+let split = false; //Splits the
+let finish = false; // Finishes the animation if true
 
 function typeWriter() {
-
   let txt = node.speaker + "|" + node.statement.segments[0].text;
   console.log(txt)
   $(".title").append("<h2 id='name'></h2>" + "<p id='dialogue'></p>")
@@ -114,7 +117,11 @@ function typeWriter() {
       document.getElementById("dialogue").innerHTML += txt.charAt(t);
     }
     t++;
-    setTimeout(typeWriter, 25);
+    if (!finish) {
+      setTimeout(typeWriter, 25);
+    } else {
+      setTimeout(typeWriter, 0);
+    }
   }
   //TODO: needs more logic for when the next dialogue comes
 }
@@ -125,6 +132,7 @@ function renderHTML() {
 
   t = 0;
   split = false;
+  finish = false;
   
   typeWriter();
   // Speaker name with text
