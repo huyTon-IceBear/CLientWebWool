@@ -11,17 +11,17 @@ class Reply extends HTMLElement {
     replies.setAttribute('class', 'reply-container');
 
     const text = JSON.parse(this.getAttribute('data'));
-    content = text.value?.replies || text.replies;
-    console.log(content);
-    node = text.value?.node || text.node;
+    content = text?.value?.replies || text?.replies;
+    console.log('content', content);
+    node = text?.value?.node || text?.node;
     interactionId =
-      text.value?.loggedInteractionIndex || text.loggedInteractionIndex;
-    dialogueId = text.value?.loggedDialogueId || text.loggedDialogueId;
+      text?.value?.loggedInteractionIndex || text?.loggedInteractionIndex;
+    dialogueId = text?.value?.loggedDialogueId || text?.loggedDialogueId;
     replies.setAttribute('id', interactionId);
 
     if (content !== null) {
-      for (let i = 0; i < content.length; i++) {
-        const r = content[i].statement?.segments[0].text || 'Continue';
+      for (let i = 0; i < content?.length; i++) {
+        const r = content?.[i]?.statement?.segments?.[0]?.text || 'Continue';
         replies.innerHTML += `<p class="${node}-${interactionId}-reply${i}">${r}</p>`;
       }
     }
@@ -36,12 +36,12 @@ class Reply extends HTMLElement {
   }
 
   connectedCallback() {
-    for (let i = 0; i < content.length; i++) {
+    for (let i = 0; i < content?.length; i++) {
       const a = this.shadowRoot.querySelector(
         `.${node}-${interactionId}-reply${i}`
       );
-      a.setAttribute('reply-id', content[i].replyId);
-      a.setAttribute('end-or-not', content[i].endsDialogue);
+      a.setAttribute('reply-id', content?.[i]?.replyId);
+      a.setAttribute('end-or-not', content?.[i]?.endsDialogue);
       a.setAttribute('interaction', interactionId);
 
       a.addEventListener('click', this.progress.bind(this));
@@ -55,40 +55,45 @@ class Reply extends HTMLElement {
     let sameStep =
       parseInt(e.target.getAttribute('interaction')) == interactionId;
 
-    if (sameStep) {
-      if (end === 'true') {
-        convoContainer.insertAdjacentHTML(
-          'beforeend',
-          `<div class="end-dialogue">End Dialogue.</div>`
-        );
-        interactionId = -1;
-      } else {
-        const input = `<div class="user-data"><p class="user-${id}">${e.target.innerHTML}</p><agent-avatar></agent-avatar></div>`;
-        convoContainer.insertAdjacentHTML('beforeend', input);
+    const el = document.querySelector(`conversation-container`);
+    if (el.shadowRoot) {
+      let convoContainer = el.shadowRoot.querySelector(`#conversation`);
+      console.log(convoContainer);
+      if (sameStep) {
+        if (end === 'true') {
+          convoContainer.insertAdjacentHTML(
+            'beforeend',
+            `<div class="end-dialogue">End Dialogue.</div>`
+          );
+          interactionId = -1;
+        } else {
+          const input = `<div class="user-data"><p class="user-${id}">${e.target.innerHTML}</p><agent-avatar></agent-avatar></div>`;
+          convoContainer.insertAdjacentHTML('beforeend', input);
 
-        let condition = sessionStorage.cookies;
-        let token =
-          condition == 'true'
-            ? cookies.getCookies('authToken')
-            : sessionStorage.authToken;
+          let condition = sessionStorage.cookies;
+          let token =
+            condition == 'true'
+              ? cookies.getCookies('authToken')
+              : sessionStorage.authToken;
 
-        await $.ajax({
-          url: this.baseUrl + this.port + '/wool/v1/dialogue/progress',
-          type: 'POST',
-          dataType: 'json',
-          data: {
-            loggedDialogueId: dialogueId,
-            loggedInteractionIndex: interactionId,
-            replyId: id,
-          },
-          headers: { 'X-Auth-Token': token },
-          success: function (res) {
+          const formData = new FormData();
+          formData.append('loggedDialogueId', dialogueId);
+          formData.append('loggedInteractionIndex', interactionId);
+          formData.append('replyId', id);
+
+          await fetch(this.baseUrl + this.port + '/wool/v1/dialogue/progress', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-Auth-Token': token,
+            },
+          }).then(async (response) => {
+            let res = await response.json();
             this.dispatchEvent(
               new CustomEvent('data-received', { detail: res })
             );
-            // return res;
-          }.bind(this),
-        });
+          });
+        }
       }
     }
   }

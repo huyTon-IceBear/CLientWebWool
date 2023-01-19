@@ -2,7 +2,7 @@ const template = document.createElement('template');
 import { config } from '../config.js';
 import { cookies } from '../cookies/index.js';
 template.innerHTML = `
-    <link rel="stylesheet" href="/WoolLib/login/style.css"/>
+    <link rel="stylesheet" href="WoolLib/login/style.css"/>
     <div class="login-screen">
       <input type="checkbox" id="chk" aria-hidden="true" />
       <div class="signup">
@@ -73,7 +73,7 @@ class LoginScreen extends HTMLElement {
         setTimeout(() => {
           evt.target.classList.remove('loading');
         }, 1000);
-        window.location.href = './test/instagramVer/insVer.html';
+        window.location.href = '../../test.html';
       }, 2000);
     });
   }
