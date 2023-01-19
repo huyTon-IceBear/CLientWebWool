@@ -73,7 +73,6 @@ class LoginScreen extends HTMLElement {
         setTimeout(() => {
           evt.target.classList.remove('loading');
         }, 1000);
-        // window.location.href = './test/instagramVer/insVer.html';
         window.location.href = '../../test.html';
       }, 2000);
     });

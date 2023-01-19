@@ -18,7 +18,6 @@ class ConversationScreen extends HTMLElement {
   }
 
   async connectedCallback() {
-    console.log('Custom square element added to page.');
     this.convoContainer = this.shadowRoot.querySelector('#conversation');
     await this.startDialogue();
   }
@@ -54,7 +53,6 @@ class ConversationScreen extends HTMLElement {
     let agentStatement = `<agent-stmt data='${res}'></agent-stmt>`;
     let replies = `<node-replies class='step${this.interactionId}' data='${res}'></node-replies>`;
     let avatar = `<agent-avatar></agent-avatar>`;
-
     let data = `<div class="agent-data">${avatar}<div>${agentStatement}${replies}</div></div>`;
     this.convoContainer.insertAdjacentHTML('beforeend', data);
     this.progress();

@@ -55,60 +55,45 @@ class Reply extends HTMLElement {
     let sameStep =
       parseInt(e.target.getAttribute('interaction')) == interactionId;
 
-    const currentShadowRoot = this.shadowRoot.querySelector(
-      'div.reply-container'
-    );
-    console.log('currentShadowRoot', currentShadowRoot);
-    const parentShadowRoot = currentShadowRoot.host.shadowRoot;
-    console.log('parentShadowRoot', parentShadowRoot);
+    const el = document.querySelector(`conversation-container`);
+    if (el.shadowRoot) {
+      let convoContainer = el.shadowRoot.querySelector(`#conversation`);
+      console.log(convoContainer);
+      if (sameStep) {
+        if (end === 'true') {
+          convoContainer.insertAdjacentHTML(
+            'beforeend',
+            `<div class="end-dialogue">End Dialogue.</div>`
+          );
+          interactionId = -1;
+        } else {
+          const input = `<div class="user-data"><p class="user-${id}">${e.target.innerHTML}</p><agent-avatar></agent-avatar></div>`;
+          convoContainer.insertAdjacentHTML('beforeend', input);
 
-    // let ancestorShadowRoot = currentShadowRoot;
-    // while (ancestorShadowRoot.host) {
-    //   ancestorShadowRoot = ancestorShadowRoot.host.shadowRoot;
-    //   // check if ancestorShadowRoot is null before proceeding.
-    // }
-    // console.log('ancestorShadowRoot', ancestorShadowRoot);
+          let condition = sessionStorage.cookies;
+          let token =
+            condition == 'true'
+              ? cookies.getCookies('authToken')
+              : sessionStorage.authToken;
 
-    const elementInParentShadowRoot = parentShadowRoot.querySelector(
-      'conversation-container'
-    );
+          const formData = new FormData();
+          formData.append('loggedDialogueId', dialogueId);
+          formData.append('loggedInteractionIndex', interactionId);
+          formData.append('replyId', id);
 
-    console.log('convoContainer', elementInParentShadowRoot);
-
-    if (sameStep) {
-      if (end === 'true') {
-        convoContainer.insertAdjacentHTML(
-          'beforeend',
-          `<div class="end-dialogue">End Dialogue.</div>`
-        );
-        interactionId = -1;
-      } else {
-        const input = `<div class="user-data"><p class="user-${id}">${e.target.innerHTML}</p><agent-avatar></agent-avatar></div>`;
-        convoContainer.insertAdjacentHTML('beforeend', input);
-
-        let condition = sessionStorage.cookies;
-        let token =
-          condition == 'true'
-            ? cookies.getCookies('authToken')
-            : sessionStorage.authToken;
-
-        await $.ajax({
-          url: this.baseUrl + this.port + '/wool/v1/dialogue/progress',
-          type: 'POST',
-          dataType: 'json',
-          data: {
-            loggedDialogueId: dialogueId,
-            loggedInteractionIndex: interactionId,
-            replyId: id,
-          },
-          headers: { 'X-Auth-Token': token },
-          success: function (res) {
+          await fetch(this.baseUrl + this.port + '/wool/v1/dialogue/progress', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-Auth-Token': token,
+            },
+          }).then(async (response) => {
+            let res = await response.json();
             this.dispatchEvent(
               new CustomEvent('data-received', { detail: res })
             );
-            // return res;
-          }.bind(this),
-        });
+          });
+        }
       }
     }
   }
