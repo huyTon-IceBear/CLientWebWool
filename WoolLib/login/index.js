@@ -73,7 +73,8 @@ class LoginScreen extends HTMLElement {
         setTimeout(() => {
           evt.target.classList.remove('loading');
         }, 1000);
-        window.location.href = '../rpg/rpg-conversation.js';
+        window.location.href = './test/instagramVer/insVer.html';
+        // window.location.href = '../../test.html';
       }, 2000);
     });
   }
@@ -81,18 +82,18 @@ class LoginScreen extends HTMLElement {
   async callLoginApi(user, password) {
     try {
       const response = await fetch(
-        this.baseUrl + this.port + '/wool/v1/auth/login',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            user: user,
-            password: password,
-            tokenExpiration: 0,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
+          this.baseUrl + this.port + '/wool/v1/auth/login',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              user: user,
+              password: password,
+              tokenExpiration: 0,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
       );
 
       const data = await response.json();
