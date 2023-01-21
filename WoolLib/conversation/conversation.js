@@ -1,6 +1,7 @@
 const template = document.createElement('template');
-import { config } from '../config.js';
-import { cookies } from '../cookies/index.js';
+import { config, route } from '../config.js';
+import { postFormData } from '../helpers/api.js';
+
 template.innerHTML = `
     <link rel="stylesheet" href="/WoolLib/conversation/style.css"/>
     <div class="conversation-container" id="conversation" />
@@ -9,10 +10,8 @@ template.innerHTML = `
 class ConversationScreen extends HTMLElement {
   constructor() {
     super();
-    this.port = config.port;
-    this.baseUrl = config.baseUrl;
+    this.startRoute = route.startDialogue;
     this.interactionId = 0;
-    this.convoContainer;
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
@@ -23,23 +22,10 @@ class ConversationScreen extends HTMLElement {
   }
 
   async startDialogue() {
-    let condition = sessionStorage.cookies;
-    let token =
-      condition == 'true'
-        ? cookies.getCookies('authToken')
-        : sessionStorage.authToken;
-
-    const formData = new FormData();
-    formData.append('dialogueName', 'basic');
-    formData.append('language', 'en');
-    formData.append('timeZone', 'Europe/Lisbon');
-
-    await fetch(this.baseUrl + this.port + '/wool/v1/dialogue/start', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'X-Auth-Token': token,
-      },
+    await postFormData(this.startRoute, {
+      dialogueName: config.dialogueName,
+      language: config.language,
+      timeZone: config.timeZone,
     }).then(async (response) => {
       let res = await response.json();
       this.getInfoNode(res);
@@ -48,7 +34,6 @@ class ConversationScreen extends HTMLElement {
   }
 
   renderHTML(response) {
-    // const convoContainer = this.shadowRoot.querySelector('#conversation');
     const res = JSON.stringify(response);
     let agentStatement = `<agent-stmt data='${res}'></agent-stmt>`;
     let replies = `<node-replies class='step${this.interactionId}' data='${res}'></node-replies>`;

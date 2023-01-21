@@ -1,12 +1,12 @@
 let content, node, interactionId, dialogueId;
-import { config } from '../config.js';
-import { cookies } from '../cookies/index.js';
-
+import { config, route } from '../config.js';
+import { postFormData } from '../helpers/api.js';
 class Reply extends HTMLElement {
   constructor() {
     super();
     this.port = config.port;
     this.baseUrl = config.baseUrl;
+    this.processRoute = route.processDialogue;
     let replies = document.createElement('div');
     replies.setAttribute('class', 'reply-container');
 
@@ -43,7 +43,6 @@ class Reply extends HTMLElement {
       a.setAttribute('reply-id', content?.[i]?.replyId);
       a.setAttribute('end-or-not', content?.[i]?.endsDialogue);
       a.setAttribute('interaction', interactionId);
-
       a.addEventListener('click', this.progress.bind(this));
     }
   }
@@ -58,7 +57,7 @@ class Reply extends HTMLElement {
     const el = document.querySelector(`conversation-container`);
     if (el.shadowRoot) {
       let convoContainer = el.shadowRoot.querySelector(`#conversation`);
-      console.log(convoContainer);
+
       if (sameStep) {
         if (end === 'true') {
           convoContainer.insertAdjacentHTML(
@@ -70,23 +69,10 @@ class Reply extends HTMLElement {
           const input = `<div class="user-data"><p class="user-${id}">${e.target.innerHTML}</p><agent-avatar></agent-avatar></div>`;
           convoContainer.insertAdjacentHTML('beforeend', input);
 
-          let condition = sessionStorage.cookies;
-          let token =
-            condition == 'true'
-              ? cookies.getCookies('authToken')
-              : sessionStorage.authToken;
-
-          const formData = new FormData();
-          formData.append('loggedDialogueId', dialogueId);
-          formData.append('loggedInteractionIndex', interactionId);
-          formData.append('replyId', id);
-
-          await fetch(this.baseUrl + this.port + '/wool/v1/dialogue/progress', {
-            method: 'POST',
-            body: formData,
-            headers: {
-              'X-Auth-Token': token,
-            },
+          await postFormData(this.processRoute, {
+            loggedDialogueId: dialogueId,
+            loggedInteractionIndex: interactionId,
+            replyId: id,
           }).then(async (response) => {
             let res = await response.json();
             this.dispatchEvent(
