@@ -1,6 +1,8 @@
 const template = document.createElement('template');
-import { config } from '../config.js';
+import { config, route } from '../config.js';
 import { cookies } from '../cookies/index.js';
+import { postJSON } from '../helpers/api.js';
+
 template.innerHTML = `
     <link rel="stylesheet" href="WoolLib/login/style.css"/>
     <div class="login-screen">
@@ -47,8 +49,8 @@ template.innerHTML = `
 class LoginScreen extends HTMLElement {
   constructor() {
     super();
-    this.port = config.port;
-    this.baseUrl = config.baseUrl;
+    this.loginRoute = route.login;
+    this.redirectPath = config.redirectPath;
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
@@ -73,28 +75,18 @@ class LoginScreen extends HTMLElement {
         setTimeout(() => {
           evt.target.classList.remove('loading');
         }, 1000);
-        // window.location.href = './test/instagramVer/insVer.html';
-        window.location.href = './../test.html';
+        window.location.href = this.redirectPath;
       }, 2000);
     });
   }
 
   async callLoginApi(user, password) {
     try {
-      const response = await fetch(
-          this.baseUrl + this.port + '/wool/v1/auth/login',
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              user: user,
-              password: password,
-              tokenExpiration: 0,
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-      );
+      const response = await postJSON(this.loginRoute, {
+        user: user,
+        password: password,
+        tokenExpiration: 0,
+      });
 
       const data = await response.json();
 
