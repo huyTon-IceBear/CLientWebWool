@@ -103,7 +103,7 @@ let finish = false; // Finishes the animation if true
 
 function typeWriter() {
   let txt = node.speaker + "|" + node.statement.segments[0].text;
-  console.log(txt)
+  // console.log(txt)
   $(".title").append("<h2 id='name'></h2>" + "<p id='dialogue'></p>")
 
   if (t < txt.length) {
@@ -183,13 +183,6 @@ function renderHTML() {
             tempString += "Something went wrong..."
             break;
         }
-        // if (segment.segmentType === TYPE.TEXT) {
-        //   tempString += segment.text;
-        // } else if (segment.segmentType === TYPE.INPUT) {
-        //   tempString += `<input type="text" id=${segment.variableName}>`;
-        //   textOnly = false;
-        //   // $(".text").append("<input>" + node.item.text + "</input> <br>")
-        // }
       });
       // console.log(tempString);
       if (textOnly && !endsDialogue) {

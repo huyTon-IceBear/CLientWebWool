@@ -6,7 +6,7 @@ template.innerHTML = `
     <div class="conversation-container" id="conversation" />
 `;
 
-class ConversationScreen extends HTMLElement {
+class RPGConversationScreen extends HTMLElement {
     constructor() {
         super();
         this.port = config.port;
