@@ -196,6 +196,7 @@ function renderHTML() {
       });
       // console.log(tempString);
       //Depending on if the node is text only and doesn't end the conversation it will make different buttons with different functionality
+      //Also kinda broken if there's an input
       if (textOnly && !endsDialogue) {
         appendString += `<button type="button" class="button" id=${reply.replyId} onclick=continueDialogue(${reply.replyId})>${tempString}</button>`;
       } else if (!textOnly && !endsDialogue) {
