@@ -10,8 +10,8 @@ template.innerHTML = `
 class ConversationScreen extends HTMLElement {
   constructor() {
     super();
-    this.startRoute = route.startDialogue;
     this.interactionId = 0;
+    this.startRoute = route.startDialogue;
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
