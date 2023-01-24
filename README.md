@@ -17,13 +17,13 @@ User can include the web component as a `<tag>` in `.html` file
 For how to use the web-client library, you need to follow the installation for setting up files
 
 1. Download/Clone source code from [Github Repo](https://github.com/ramen-IceBear/CLientWebWool)
-2. In the **WoolLib** library, there is a `index.js`. User need to include the file in `script` in any `.html` files you want to add the web client
+2. To use the **WoolLib** library, user need to include the file in `script` in any `.html` files you want to add the web client
 
 ```html
     <script type="module" src="./WoolLib/index.js"></script>
 ```
 
-3. Include the **login-screen** component in the `.html` file you want to display the login screen.
+3. Include the **login-screen** and **conversation-container** component in separate `.html` files.
 
 ```html
     <body>
@@ -31,14 +31,29 @@ For how to use the web-client library, you need to follow the installation for s
     </body>
 ```
 
-4. Next, create a another `.html` file to display the conversation screen.  Remember to include the `index.js` in the body of the file like you need in step 3.
-
-5.  Include the **conversation-container** component in the body of the `.html` file you want to display the conversation screen.
-
 ```html
     <body>
       <conversation-container />
     </body>
+```
+
+4. Update the config file for file name and api call in WoolLib folder.
+
+```javascript
+    const config = {
+        baseUrl: 'http://localhost:',
+        port: 8080,
+        redirectPath: '../../test.html',
+        dialogueName: 'basic',
+        language: 'en',
+        timeZone: 'Europe/Lisbon',
+    };
+
+    const route = {
+        login: '/wool/v1/auth/login',
+        startDialogue: '/wool/v1/dialogue/start',
+        processDialogue: '/wool/v1/dialogue/progress',
+    };
 ```
 
 ## Getting started
