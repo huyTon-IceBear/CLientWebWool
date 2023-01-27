@@ -58,9 +58,6 @@ class RPGConversationScreen extends HTMLElement {
       .then(async (response) => {
         let res = await response.json();
         this.node = res;
-
-        console.log(this.node);
-
         this.lastSpeaker = this.node.speaker;
         this.speakers.push({ name: this.node?.speaker, speaking: true });
 
@@ -78,8 +75,6 @@ class RPGConversationScreen extends HTMLElement {
     this.dateContinue.loggedDialogueId = this.node.loggedDialogueId;
     this.dateContinue.loggedInteractionIndex = this.node.loggedInteractionIndex;
     this.dateContinue.replyId = parseInt(id);
-
-    console.log(this.dateContinue);
 
     await postFormData(route.processDialogue, this.dateContinue)
       .then(async (response) => {
@@ -130,11 +125,9 @@ class RPGConversationScreen extends HTMLElement {
       if (!this.finish) {
         await new Promise((resolve) => setTimeout(resolve, 25));
         this.typeWriter();
-        // setTimeout(this.typeWriter(), 25);
       } else {
         await new Promise((resolve) => setTimeout(resolve, 0));
         this.typeWriter();
-        // setTimeout(this.typeWriter(), 0);
       }
     }
   }
@@ -151,9 +144,6 @@ class RPGConversationScreen extends HTMLElement {
 
     let textOnly = true;
     let endsDialogue = false; //If the node ends the dialogue
-
-    console.log(this.node);
-
     this.node.replies.forEach((reply) => {
       const paragraph = document.createElement('p');
 
@@ -168,9 +158,7 @@ class RPGConversationScreen extends HTMLElement {
       if (reply.endsDialogue === true) {
         endsDialogue = true;
       }
-      // console.log("i=" + i);
       if (reply.statement === null && !endsDialogue) {
-        console.log('continue');
         button.innerHTML = 'CONTINUE';
         button.addEventListener('click', () => {
           this.continueDialogue(reply.replyId);
@@ -179,8 +167,6 @@ class RPGConversationScreen extends HTMLElement {
       } else {
         //This loop checks each part of a reply (replies can come in different parts, often when a action or input is included)
         //And checks each part and adds something different to the temporary string
-        console.log(reply);
-
         reply.statement.segments.forEach((segment) => {
           switch (segment.segmentType) {
             case 'TEXT':
@@ -201,8 +187,8 @@ class RPGConversationScreen extends HTMLElement {
               break;
           }
         });
-
-        //Depending on if the node is text only and doesn't end the conversation it will make different buttons with different functionality
+        //Depending on if the node is text only and doesn't end the conversation it
+        //will make different buttons with different functionality
         //Also kinda broken if there's an input
         if (textOnly && !endsDialogue) {
           button.addEventListener('click', () => {
@@ -219,9 +205,6 @@ class RPGConversationScreen extends HTMLElement {
           });
         }
       }
-      console.log(button);
-      console.log(paragraph);
-
       //Lastly appends the whole thing to the div
       if (this.shadowRoot) {
         const element = this.shadowRoot.querySelector('.text');
@@ -236,7 +219,6 @@ class RPGConversationScreen extends HTMLElement {
   endDialogue() {
     this.shadowRoot.querySelector('.title').innerHTML = '';
     this.shadowRoot.querySelector('.text').innerHTML = '';
-
     this.t = 0;
     this.split = false;
     this.finish = false;
