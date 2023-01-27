@@ -149,7 +149,6 @@ class RPGConversationScreen extends HTMLElement {
 
     this.typeWriter();
 
-    let appendString = ''; //The string that gets appended
     let textOnly = true;
     let endsDialogue = false; //If the node ends the dialogue
 
@@ -164,7 +163,6 @@ class RPGConversationScreen extends HTMLElement {
       button.setAttribute('id', reply.replyId);
 
       const input = document.createElement('input');
-      appendString = '<p> ';
 
       //Sets end dialogue to true
       if (reply.endsDialogue === true) {
