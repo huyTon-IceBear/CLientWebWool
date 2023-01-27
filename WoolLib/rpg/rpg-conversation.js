@@ -44,10 +44,6 @@ class RPGConversationScreen extends HTMLElement {
 
     const a = this.shadowRoot.querySelector('.textBox');
 
-    console.log(a);
-
-    this.shadowRoot.querySelector('.title');
-
     a.addEventListener('click', () => {
       this.finish = true;
     });
@@ -84,11 +80,11 @@ class RPGConversationScreen extends HTMLElement {
     this.dateContinue.replyId = parseInt(id);
 
     console.log(this.dateContinue);
+
     await postFormData(route.processDialogue, this.dateContinue)
       .then(async (response) => {
         let res = await response.json();
         this.node = res['value'];
-
         this.renderHTML();
       })
       .catch((error) => {
@@ -99,7 +95,7 @@ class RPGConversationScreen extends HTMLElement {
       });
   }
 
-  typeWriter() {
+  async typeWriter() {
     //The text that gets put into the div
     //The split is for the 2 different elements and gets dealt with in the loop
     let txt =
@@ -132,9 +128,13 @@ class RPGConversationScreen extends HTMLElement {
       this.t++;
       //If the user clicks somewhere in the div it will set the delay to 0 to speed the animation up
       if (!this.finish) {
-        setTimeout(this.typeWriter(), 25);
+        await new Promise((resolve) => setTimeout(resolve, 25));
+        this.typeWriter();
+        // setTimeout(this.typeWriter(), 25);
       } else {
-        setTimeout(this.typeWriter(), 0);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        this.typeWriter();
+        // setTimeout(this.typeWriter(), 0);
       }
     }
   }
