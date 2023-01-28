@@ -12,7 +12,9 @@ class Reply extends HTMLElement {
 
     const text = JSON.parse(this.getAttribute('data'));
     content = text?.value?.replies || text?.replies;
+
     console.log('content', content);
+
     node = text?.value?.node || text?.node;
     interactionId =
       text?.value?.loggedInteractionIndex || text?.loggedInteractionIndex;
