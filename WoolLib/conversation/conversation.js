@@ -1,6 +1,7 @@
 const template = document.createElement("template");
-import { config } from "../config.js";
-import { cookies } from "../cookies/index.js";
+import { config, route } from "../config.js";
+import { postFormData } from "../helpers/api.js";
+
 template.innerHTML = `
     <link rel="stylesheet" href="/WoolLib/conversation/style.css"/>
     <div class="conversation-container" id="conversation" />
@@ -9,11 +10,8 @@ template.innerHTML = `
 class ConversationScreen extends HTMLElement {
   constructor() {
     super();
-    this.port = config.port;
-    this.baseUrl = config.baseUrl;
+    this.startRoute = route.startDialogue;
     this.interactionId = 0;
-    this.convoContainer;
-    this.res;
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
@@ -24,23 +22,10 @@ class ConversationScreen extends HTMLElement {
   }
 
   async startDialogue() {
-    let condition = sessionStorage.cookies;
-    let token =
-      condition == "true"
-        ? cookies.getCookies("authToken")
-        : sessionStorage.authToken;
-
-    const formData = new FormData();
-    formData.append("dialogueName", "basic");
-    formData.append("language", "en");
-    formData.append("timeZone", "Europe/Lisbon");
-
-    await fetch(this.baseUrl + this.port + "/wool/v1/dialogue/start", {
-      method: "POST",
-      body: formData,
-      headers: {
-        "X-Auth-Token": token,
-      },
+    await postFormData(this.startRoute, {
+      dialogueName: config.dialogueName,
+      language: config.language,
+      timeZone: config.timeZone,
     }).then(async (response) => {
       this.res = await response.json();
       this.getInfoNode(this.res);
@@ -50,28 +35,23 @@ class ConversationScreen extends HTMLElement {
 
   renderHTML(response) {
     const responses = JSON.stringify(response);
-    console.log(JSON.stringify(this.res))
-    console.log(responses)
-
     const speaker =
       JSON.stringify(response?.speaker) ||
       JSON.stringify(response?.value?.speaker);
-  
+
     let agentStatement = `<agent-stmt data='${responses}'></agent-stmt>`;
     let replies = `<node-replies class='step${this.interactionId}' data='${responses}'></node-replies>`;
     let avatar = `<agent-avatar speaker='${speaker}' 
                   img="https://img.icons8.com/external-linector-lineal-linector/512/external-avatar-man-avatar-linector-lineal-linector-3.png">
                   </agent-avatar>`;
-    
-    let ctrl = `<conversation-controls/>`
 
     let data = `<div class="agent-data">${avatar}<div>${agentStatement}${replies}</div></div>`;
+    let back = `<conversation-back/>`;
 
     this.convoContainer.insertAdjacentHTML("beforeend", data);
-    this.convoContainer.insertAdjacentHTML("beforeend", ctrl);
+    this.convoContainer.insertAdjacentHTML("beforeend", back);
 
     this.convoContainer.lastElementChild.scrollIntoView();
-
     this.progress();
   }
 
