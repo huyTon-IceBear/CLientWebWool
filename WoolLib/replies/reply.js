@@ -67,7 +67,7 @@ class Reply extends HTMLElement {
           );
           interactionId = -1;
         } else {
-          const input = `<div class="user-data"><p class="user-${id}">${e.target.innerHTML}</p><agent-avatar></agent-avatar></div>`;
+          const input = `<div class="user-data"><p class="user-${id}">${e.target.innerHTML}</p><agent-avatar/></div>`;
           convoContainer.insertAdjacentHTML('beforeend', input);
 
           let condition = sessionStorage.cookies;
