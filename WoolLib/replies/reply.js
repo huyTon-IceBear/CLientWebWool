@@ -4,15 +4,12 @@ import { postFormData } from '../helpers/api.js';
 class Reply extends HTMLElement {
   constructor() {
     super();
-    this.port = config.port;
-    this.baseUrl = config.baseUrl;
     this.processRoute = route.processDialogue;
     let replies = document.createElement('div');
     replies.setAttribute('class', 'reply-container');
 
     const text = JSON.parse(this.getAttribute('data'));
     content = text?.value?.replies || text?.replies;
-    console.log('content', content);
     node = text?.value?.node || text?.node;
     interactionId =
       text?.value?.loggedInteractionIndex || text?.loggedInteractionIndex;

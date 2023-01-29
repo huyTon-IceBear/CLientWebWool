@@ -11,6 +11,7 @@ const route = {
   login: '/wool/v1/auth/login',
   startDialogue: '/wool/v1/dialogue/start',
   processDialogue: '/wool/v1/dialogue/progress',
+  backDialogue: '/wool/v1/dialogue/back',
 };
 
 export { config, route };
