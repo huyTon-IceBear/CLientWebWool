@@ -48,7 +48,11 @@ Below are the steps for installing the web client.
 
 You should change the values, especially baseUrl, port, and route based on your local server.
 
-### How to use
+## Testing
+
+We already have 2 **.html** files for testing. They are **index.html** & **test.html**.
+
+## How to use
 
 1. Create 2 separate **.html* files for login screen and conversation screen (rpg style or normal style).
 
@@ -103,6 +107,10 @@ You can also change this based on your preferences.
 3. Cannot run/use the client library
 
 Check if the WOOL web server is running. The library only works will the api from the server. If not, it's only show the login component and will get error in the conversation screen.
+
+4. Run the conversation file before login file
+
+You cannot do this since the conversation file need the token to get data from the server. You can modify the library with hard-code value for the token but we do not suggest this.
 
 ## Questions
 
