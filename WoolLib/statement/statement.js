@@ -3,9 +3,11 @@ let statement;
 class Statement extends HTMLElement {
   constructor() {
     super();
+    //Create statement component
     const stmt = document.createElement('div');
     stmt.setAttribute('class', 'wool-statement');
 
+    //Get data for statement
     const text = JSON.parse(this.getAttribute('data'));
     statement =
       text.value?.statement?.segments?.[0]?.text ||

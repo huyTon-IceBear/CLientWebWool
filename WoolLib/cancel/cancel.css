@@ -1,0 +1,38 @@
+button {
+    background: transparent;
+    border: 0;
+    outline: 0;
+}
+
+.wool-control-cancel {  
+    position: relative;
+    width: 3.124rem;
+    height: 1.562rem;
+    cursor: pointer;
+    margin-left: 20rem;
+    margin-right: 1rem;
+}
+
+icancel {
+    position: absolute;
+    display: block;
+    width: 1.8rem;
+    height: 0.15rem;
+    border-radius: 0.15rem/0.062rem;
+    background: #000;
+    transition: all 0.15s ease;
+}
+
+icancel:first-child {
+    position: relative;
+    right: 58%;
+    transform-origin: 0% 50%;
+    transform: translate(1.2rem, -0.25rem) rotate( 45deg );
+}
+
+icancel:last-child {
+    position: relative;
+    right: 58%;
+    transform-origin: 100% 50%;
+    transform: translate( 0.625rem, -0.45rem ) rotate( -45deg );
+}

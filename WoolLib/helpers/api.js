@@ -7,7 +7,10 @@ let token =
     ? cookies.getCookies('authToken')
     : sessionStorage.authToken;
 
-// JSON payload
+/**Call POST API
+ * JSON payload
+ * use for login
+ */
 function postJSON(url, data) {
   const api = config.baseUrl + config.port + url;
   return fetch(api, {
@@ -19,7 +22,10 @@ function postJSON(url, data) {
   });
 }
 
-// FormData
+/**Call POST API
+ * FormData
+ * use for methods of a dialogue
+ */
 function postFormData(url, data) {
   const formData = objectToFormData(data);
   const api = config.baseUrl + config.port + url;

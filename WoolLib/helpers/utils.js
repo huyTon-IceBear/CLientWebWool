@@ -1,3 +1,4 @@
+/**Turn object into form data */
 function objectToFormData(obj) {
   const formData = new FormData();
   for (const key of Object.keys(obj)) {
