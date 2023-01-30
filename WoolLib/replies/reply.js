@@ -1,5 +1,5 @@
 let content, node, interactionId, dialogueId, a;
-import { config, route } from "../config.js";
+import { route } from "../config.js";
 import { postFormData } from "../helpers/api.js";
 class Reply extends HTMLElement {
   constructor() {
