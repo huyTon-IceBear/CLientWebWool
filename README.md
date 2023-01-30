@@ -84,9 +84,21 @@ You should change the values, especially baseUrl, port, and route based on your 
 
 You should check which dialogue file that your server contain and adjust above value based on that.
 
+![image](https://user-images.githubusercontent.com/78846812/215611290-0ecb22a8-a39d-4db1-a666-15d954b49981.png)
+
+The dialogues files are listed in the folder **resources/dialogues** of the server. You can use the [WOOL Editor IDE](https://www.woolplatform.eu/docs/wool-platform/dev/tutorials/tutorial-author-first-wool-dialogue.html) to add create a new dialogue.
+
+The value in the config file of wool library client is the default value.
+
 2. Cannot login with credential
 
-The credential for authentication are defined in the user.xml file in the wool server. You can also change this based on your preferences.
+The credential for authentication are defined in the user.xml file in the wool server. 
+
+![image](https://user-images.githubusercontent.com/78846812/215611684-c90bd9ea-f7f0-4007-9509-3d3b790661bf.png)
+
+You can also change this based on your preferences.
+
+![image](https://user-images.githubusercontent.com/78846812/215611782-fec9094b-a816-49e6-8603-a82c3a324cff.png)
 
 3. Cannot run/use the client library
 
