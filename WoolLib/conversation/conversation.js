@@ -28,8 +28,15 @@ class ConversationScreen extends HTMLElement {
     }).then(async (response) => {
       this.res = await response.json();
       this.getInfoNode(this.res);
+
+      let contn = `<conversation-continue data='${this.passRes}'></conversation-continue>`;
+      this.convoContainer.insertAdjacentHTML("afterend", contn);
+      // let cancel = `<conversation-cancel data='${this.passRes}'></conversation-cancel>`;
+      // this.convoContainer.insertAdjacentHTML("afterend", cancel);
       let back = `<conversation-back data='${this.passRes}'></conversation-back>`;
       this.convoContainer.insertAdjacentHTML("afterend", back);
+
+
       this.renderHTML();
     });
   }
@@ -48,6 +55,7 @@ class ConversationScreen extends HTMLElement {
       this.convoContainer.lastElementChild.scrollIntoView();
       this.progress();
       this.back();
+      this.continue();
     }
   }
 
@@ -78,6 +86,20 @@ class ConversationScreen extends HTMLElement {
       this.renderHTML();
     };
     backBtn.addEventListener("event-received", this.backListener);
+  }
+
+  continue() {
+    const backBtn = this.shadowRoot.querySelector("conversation-back");
+    const continueBtn = this.shadowRoot.querySelector("conversation-continue");
+
+    continueBtn.removeEventListener("eventContn-received", this.continueListener);
+    this.continueListener = (event) => {
+      this.getInfoNode(event?.detail);
+      backBtn.setAttribute("data", this.passRes);
+      backBtn.updateData();
+      this.renderHTML();
+    };
+    continueBtn.addEventListener("eventContn-received", this.continueListener);
   }
 
   getInfoNode(response) {

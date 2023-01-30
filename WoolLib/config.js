@@ -12,6 +12,8 @@ const route = {
   startDialogue: '/wool/v1/dialogue/start',
   processDialogue: '/wool/v1/dialogue/progress',
   backDialogue: '/wool/v1/dialogue/back',
+  cancelDialogue: '/wool/v1/dialogue/cancel',
+  continueDialogue: '/wool/v1/dialogue/continue',
 };
 
 export { config, route };

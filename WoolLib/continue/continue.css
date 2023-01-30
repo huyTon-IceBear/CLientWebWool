@@ -1,0 +1,38 @@
+button {
+    background: transparent;
+    border: 0;
+    outline: 0;
+}
+
+.wool-control-continue {  
+    position: relative;
+    width: 1.562rem;
+    height: 1.562rem;
+    cursor: pointer;
+    margin-left: 20rem;
+    margin-right: 1rem;
+}
+
+icontinue {
+    position: absolute;
+    display: block;
+    width: 0.9rem;
+    height: 0.15rem;
+    border-radius: 0.15rem/0.062rem;
+    background: #000;
+    transition: all 0.15s ease;
+}
+
+icontinue:first-child {
+    position: relative;
+    right: 58%;
+    transform-origin: 0% 50%;
+    transform: translate(1.03rem, -0.1rem) rotate( 40deg );
+}
+
+icontinue:last-child {
+    position: relative;
+    right: 58%;
+    transform-origin: 100% 50%;
+    transform: translate(0.83rem, 0.23rem) rotate( -40deg );
+}
