@@ -9,35 +9,22 @@
 2. `<agent-stmt>` display the statement of each node
 3. `<node-replies>` display the replies which can choose of each node
 4. `<login-screen>` display login component with authentication
+5. `<conversation-back>` back to previous stage of the dialogue
+6. `<conversation-cancel>` cancel ongoing dialogue
+7. `<conversation-continue>` continue ongoing dialogue
+8. `<rpg-conversation>` display the dialogue in rpg style
+9. `<conversation-container>` display the dialogue
 
 User can include the web component as a `<tag>` in `.html` file
 
 ## Installation
 
-For how to use the web-client library, you need to follow the installation for setting up files
+Before using the web-client library, you need to read about the WOOL platform. Make sure to follow the [tutorial](https://www.woolplatform.eu/docs/wool-platform/dev/tutorials/index.html) to set up the WOOL Web Server
+
+Below are the steps for installing the web client.
 
 1. Download/Clone source code from [Github Repo](https://github.com/ramen-IceBear/CLientWebWool)
-2. To use the **WoolLib** library, user need to include the file in `script` in any `.html` files you want to add the web client
-
-```html
-    <script type="module" src="./WoolLib/index.js"></script>
-```
-
-3. Include the **login-screen** and **conversation-container** component in separate `.html` files.
-
-```html
-    <body>
-        <login-screen />
-    </body>
-```
-
-```html
-    <body>
-      <conversation-container />
-    </body>
-```
-
-4. Update the config file for file name and api call in WoolLib folder.
+2. Update the config file, especially config value and route. For example:
 
 ```javascript
     const config = {
@@ -53,18 +40,57 @@ For how to use the web-client library, you need to follow the installation for s
         login: '/wool/v1/auth/login',
         startDialogue: '/wool/v1/dialogue/start',
         processDialogue: '/wool/v1/dialogue/progress',
+        backDialogue: '/wool/v1/dialogue/back',
+        cancelDialogue: '/wool/v1/dialogue/cancel',
+        continueDialogue: '/wool/v1/dialogue/continue',
     };
 ```
 
-## Getting started
+You should change the values, especially baseUrl, port, and route based on your local server.
 
-Here is an example of a basic app using **Web-client** 's `login-screen` component:
+### How to use
+
+1. Create 2 separate **.html* files for login screen and conversation screen (rpg style or normal style).
+
+2. Include the file in `script` in any `.html` files you want to add the web client
 
 ```html
+    <script type="module" src="./WoolLib/index.js"></script>
+```
+
+3. Include the **login-screen** and **conversation-container** component in `.html` files.
+
+```html
+    /**login screen*/
+
     <body>
         <login-screen />
     </body>
 ```
+
+```html
+    /**conversation screen*/
+    <body>
+      <!--You can use <rpg-conversation/> for rpg style -->
+      <conversation-container />
+    </body>
+```
+
+4. Change the value of redirectPath in the config of the library. It should be the path of the **.html** for conversation screen.
+
+## Pitfall
+
+1. Wrong config value for dialogueName, language, timeZone
+
+You should check which dialogue file that your server contain and adjust above value based on that.
+
+2. Cannot login with credential
+
+The credential for authentication are defined in the user.xml file in the wool server. You can also change this based on your preferences.
+
+3. Cannot run/use the client library
+
+Check if the WOOL web server is running. The library only works will the api from the server. If not, it's only show the login component and will get error in the conversation screen.
 
 ## Questions
 
