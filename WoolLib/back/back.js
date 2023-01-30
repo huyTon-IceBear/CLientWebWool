@@ -6,6 +6,7 @@ class ButtonBack extends HTMLElement {
     super();
     this.backRoute = route.backDialogue;
 
+    //Create back button component
     const back = document.createElement("button");
     back.setAttribute("class", "wool-control-back");
     const backIcon = document.createElement("i");
@@ -13,6 +14,7 @@ class ButtonBack extends HTMLElement {
     back.appendChild(backIcon);
     back.appendChild(backIcon.cloneNode(false));
 
+    //Get data for back button
     this.text = JSON.parse(this.getAttribute("data"));
     this.interactionId =
       this.text?.value?.loggedInteractionIndex ||
@@ -34,6 +36,7 @@ class ButtonBack extends HTMLElement {
     a.addEventListener("click", this.back.bind(this));
   }
 
+  /**Function to call back API */
   back(e) {
     e.preventDefault();
     postFormData(this.backRoute, {
@@ -45,6 +48,7 @@ class ButtonBack extends HTMLElement {
     });
   }
 
+  /**Update data for back button */
   updateData() {
     if (this.getAttribute("data") !== "true") {
       this.text = JSON.parse(this.getAttribute("data"));

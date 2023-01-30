@@ -1,10 +1,15 @@
 import { route } from "../config.js";
 import { postFormData } from "../helpers/api.js";
+
+/**Button to cancel a dialogue
+ * not used in conversation component
+ */
 class ButtonCancel extends HTMLElement {
   constructor() {
     super();
     this.cancelRoute = route.cancelDialogue;
 
+    //Create cancel button component
     const cancel = document.createElement("button");
     cancel.setAttribute("class", "wool-control-cancel");
     const cancelIcon = document.createElement("icancel");
@@ -12,6 +17,7 @@ class ButtonCancel extends HTMLElement {
     cancel.appendChild(cancelIcon);
     cancel.appendChild(cancelIcon.cloneNode(false));
 
+    //Get the data for cancel button
     this.text = JSON.parse(this.getAttribute("data"));
     this.dialogueId =
       this.text?.value?.loggedDialogueId || this.text?.loggedDialogueId;
@@ -30,6 +36,7 @@ class ButtonCancel extends HTMLElement {
     a.addEventListener("click", this.cancel.bind(this));
   }
 
+  /**Function to call cancel API */
   cancel(e) {
     e.preventDefault();
     postFormData(this.cancelRoute, {

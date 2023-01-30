@@ -1,3 +1,4 @@
+/**Set cookies */
 function setCookies(name, value, days) {
   let expires = '';
   if (days) {
@@ -8,6 +9,7 @@ function setCookies(name, value, days) {
   document.cookie = name + '=' + (value || '') + expires + '; path=/';
 }
 
+/**Return the value of cookies */
 function getCookies(name) {
   const nameEQ = name + '=';
   const ca = document.cookie.split(';');

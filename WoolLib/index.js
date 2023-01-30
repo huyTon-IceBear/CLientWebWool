@@ -8,6 +8,7 @@ import ButtonContinue from './continue/continue.js';
 import RPGConversationScreen from './rpg/rpg-conversation.js';
 import ConversationScreen from './conversation/conversation.js';
 
+/**Define the components */
 customElements.define('agent-avatar', Avatar);
 customElements.define('agent-stmt', Statement);
 customElements.define('node-replies', Reply);

@@ -68,6 +68,9 @@ class LoginScreen extends HTMLElement {
     });
   }
 
+  /**Redirect from login page to conversation page
+   * after login successfully
+   */
   redirectToConversationPage() {
     this.shadowRoot.querySelector('.btn').addEventListener('click', (evt) => {
       evt.target.classList.add('loading');
@@ -80,6 +83,7 @@ class LoginScreen extends HTMLElement {
     });
   }
 
+  /**Call login API */
   async callLoginApi(user, password) {
     try {
       const response = await postJSON(this.loginRoute, {

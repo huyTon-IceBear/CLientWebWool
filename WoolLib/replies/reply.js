@@ -5,9 +5,11 @@ class Reply extends HTMLElement {
   constructor() {
     super();
     this.processRoute = route.processDialogue;
+    //Create Reply component
     let replies = document.createElement("div");
     replies.setAttribute("class", "reply-container");
 
+    //Get data for each execution state
     const text = JSON.parse(this.getAttribute("data"));
     content = text?.value?.replies || text?.replies;
     node = text?.value?.node || text?.node;
@@ -16,6 +18,7 @@ class Reply extends HTMLElement {
     dialogueId = text?.value?.loggedDialogueId || text?.loggedDialogueId;
     replies.setAttribute("id", interactionId);
 
+    //Auto render option when node just has the statement
     if (content !== null) {
       for (let i = 0; i < content?.length; i++) {
         const r = content?.[i]?.statement?.segments?.[0]?.text || "Continue";
@@ -33,6 +36,7 @@ class Reply extends HTMLElement {
   }
 
   connectedCallback() {
+    //Set attributes to distinguish options
     for (let i = 0; i < content?.length; i++) {
       a = this.shadowRoot.querySelector(`.${node}-${interactionId}-reply${i}`);
       a.setAttribute("reply-id", content?.[i]?.replyId);
@@ -53,6 +57,8 @@ class Reply extends HTMLElement {
     if (el.shadowRoot) {
       let convoContainer = el.shadowRoot.querySelector(`#conversation`);
 
+      //If the replies are in the same state as the current node, 
+      //they will be triggered
       if (sameStep) {
         if (end === "true") {
           convoContainer.insertAdjacentHTML(
@@ -60,6 +66,7 @@ class Reply extends HTMLElement {
             `<div class="user-data"><div class="end-dialogue">End Dialogue.</div><agent-avatar/></div>`
           );
           interactionId = -1;
+          //If at the last step, return "true" to stop interaction
           this.dispatchEvent(
             new CustomEvent("data-received", { detail: end })
           );
@@ -67,12 +74,14 @@ class Reply extends HTMLElement {
           const input = `<div class="user-data"><p class="user-${id}">${e.target.innerHTML}</p><agent-avatar/></div>`;
           convoContainer.insertAdjacentHTML("beforeend", input);
 
+          //Call progress API
           await postFormData(this.processRoute, {
             loggedDialogueId: dialogueId,
             loggedInteractionIndex: interactionId,
             replyId: id,
           }).then(async (response) => {
             let res = await response.json();
+            //Change the "interaction" attribute to avoid confusion when using the back function
             a.setAttribute("interaction", `OLD${interactionId}`);
             this.dispatchEvent(
               new CustomEvent("data-received", { detail: res })

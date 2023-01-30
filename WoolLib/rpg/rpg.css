@@ -12,7 +12,6 @@
   background-color: #444444;
   background-image: url(../assets/background-rpg.png);
   background-repeat: no-repeat;
-  /* background-size: 100%; */
   background-size: cover;
   margin: 0;
   width: 100vw;
@@ -27,7 +26,6 @@
   bottom: 2.5%;
   left: 2.5%;
   right: 2.5%;
-  /*background-color: #34495e;*/
   color: white; /*text color*/
   padding: 2.5%;
   margin: 0 auto;
@@ -44,7 +42,6 @@
   border: gainsboro 2px inset;
   border-radius: 4px;
   padding: 2px;
-  /*position: relative; !* Position has to be absolute *!*/
   max-width: 10%;
   max-height: 10%;
   float: left;
@@ -56,28 +53,12 @@
   float: right;
   position: relative;
   margin-left: 15%;
-  /*overflow: hidden;*/
   top: -150px;
-  /*animation: typing 3s;*/
-  /*animation: typing 3s steps(40, end) forwards;*/
 }
-
-/*@keyframes typing {*/
-/*    from { width: 0 }*/
-/*    to { width: 100% }*/
-/*}*/
-
-/*!* The typing effect *!*/
-/*@keyframes typing {*/
-/*    from { width: 0 }*/
-/*    to { width: 100% }*/
-/*}*/
 
 .text {
   width: 60%;
   position: relative; /* Position has to be relative for flex */
-  /*left: var(--left_Text);*/
-  /*top: -30px;*/
   align-self: end;
   float: right;
   top: -150px;
@@ -85,15 +66,12 @@
 
 .button {
   background-color: #008cba;
-  /*position: relative; !* Position has to be relative for flex *!*/
   color: white;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
-  /*display: inline-block;*/
   font-size: 16px;
   border-radius: 2px;
-  /*border: 3px solid #008CBA;*/
   transition-duration: 0.4s;
   border: gainsboro 2px inset;
 }
@@ -125,7 +103,6 @@
     border: gainsboro 2px inset;
     border-radius: 4px;
     padding: 2px;
-    /*position: relative; !* Position has to be absolute *!*/
     max-width: 30%;
     max-height: 30%;
     float: left;

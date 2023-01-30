@@ -5,6 +5,7 @@ class ButtonContinue extends HTMLElement {
     super();
     this.continueRoute = route.continueDialogue;
 
+    //Create continue button component
     const contn = document.createElement("button");
     contn.setAttribute("class", "wool-control-continue");
     const continueIcon = document.createElement("icontinue");
@@ -12,6 +13,7 @@ class ButtonContinue extends HTMLElement {
     contn.appendChild(continueIcon);
     contn.appendChild(continueIcon.cloneNode(false));
 
+    //Get the data for continue button
     this.text = JSON.parse(this.getAttribute("data"));
     this.dialogueId =
       this.text?.value?.loggedDialogueId || this.text?.loggedDialogueId;
@@ -30,6 +32,7 @@ class ButtonContinue extends HTMLElement {
     a.addEventListener("click", this.continue.bind(this));
   }
 
+  /**Function to call continue API */
   continue(e) {
     e.preventDefault();
     postFormData(this.continueRoute, {
