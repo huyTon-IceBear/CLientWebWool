@@ -1,6 +1,6 @@
-// let interactionId, dialogueId;
-import { route } from '../config.js';
-import { postFormData } from '../helpers/api.js';
+let a;
+import { route } from "../config.js";
+import { postFormData } from "../helpers/api.js";
 class ButtonBack extends HTMLElement {
   constructor() {
     super();
@@ -13,11 +13,12 @@ class ButtonBack extends HTMLElement {
     back.appendChild(backIcon);
     back.appendChild(backIcon.cloneNode(false));
 
-    this.text = JSON.parse(this.getAttribute('data'));
+    this.text = JSON.parse(this.getAttribute("data"));
     this.interactionId =
-      this.text?.value?.loggedInteractionIndex || this.text?.loggedInteractionIndex;
-    this.dialogueId = this.text?.value?.loggedDialogueId || this.text?.loggedDialogueId;
-    console.log(this.interactionId, this.dialogueId)
+      this.text?.value?.loggedInteractionIndex ||
+      this.text?.loggedInteractionIndex;
+    this.dialogueId =
+      this.text?.value?.loggedDialogueId || this.text?.loggedDialogueId;
 
     const linkElem = document.createElement("link");
     linkElem.setAttribute("rel", "stylesheet");
@@ -29,28 +30,31 @@ class ButtonBack extends HTMLElement {
   }
 
   connectedCallback() {
-    const a = this.shadowRoot.querySelector('button');
-    a.addEventListener('click', this.back.bind(this));
+    a = this.shadowRoot.querySelector("button");
+    a.addEventListener("click", this.back.bind(this));
   }
 
-  back() {
+  back(e) {
+    e.preventDefault();
     postFormData(this.backRoute, {
       loggedDialogueId: this.dialogueId,
       loggedInteractionIndex: this.interactionId,
     }).then(async (response) => {
       let res = await response.json();
-      this.dispatchEvent(
-        new CustomEvent('event-received', { detail: res })
-      );
+      this.dispatchEvent(new CustomEvent("event-received", { detail: res }));
     });
   }
 
   updateData() {
-    this.text = JSON.parse(this.getAttribute('data'));
-    this.interactionId =
-      this.text?.value?.loggedInteractionIndex || this.text?.loggedInteractionIndex;
-    this.dialogueId = this.text?.value?.loggedDialogueId || this.text?.loggedDialogueId;
-    console.log(this.interactionId, this.dialogueId)
+    if (this.getAttribute("data") !== "true") {
+      this.text = JSON.parse(this.getAttribute("data"));
+      this.interactionId =
+        this.text?.value?.loggedInteractionIndex ||
+        this.text?.loggedInteractionIndex;
+      this.dialogueId =
+        this.text?.value?.loggedDialogueId || this.text?.loggedDialogueId;
+        a.disabled = false;
+    } else a.disabled = true;
   }
 }
 

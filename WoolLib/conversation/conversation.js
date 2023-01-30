@@ -28,53 +28,68 @@ class ConversationScreen extends HTMLElement {
     }).then(async (response) => {
       this.res = await response.json();
       this.getInfoNode(this.res);
-      this.renderHTML();
-
       let back = `<conversation-back data='${this.passRes}'></conversation-back>`;
       this.convoContainer.insertAdjacentHTML("afterend", back);
+      this.renderHTML();
     });
   }
 
   renderHTML() {
-    let agentStatement = `<agent-stmt data='${this.passRes}'></agent-stmt>`;
-    let replies = `<node-replies class='step${this.interactionId}' data='${this.passRes}'></node-replies>`;
-    let avatar = `<agent-avatar speaker='${this.speaker}' 
+    if (this.passRes !== "true") {
+      let agentStatement = `<agent-stmt data='${this.passRes}'></agent-stmt>`;
+      let replies = `<node-replies class='step${this.interactionId}' data='${this.passRes}'></node-replies>`;
+      let avatar = `<agent-avatar speaker='${this.speaker}' 
                   img="https://img.icons8.com/external-linector-lineal-linector/512/external-avatar-man-avatar-linector-lineal-linector-3.png">
                   </agent-avatar>`;
 
-    let data = `<div class="agent-data">${avatar}<div>${agentStatement}${replies}</div></div>`;
-    this.convoContainer.insertAdjacentHTML("beforeend", data);
+      let data = `<div class="agent-data">${avatar}<div>${agentStatement}${replies}</div></div>`;
+      this.convoContainer.insertAdjacentHTML("beforeend", data);
 
-    this.convoContainer.lastElementChild.scrollIntoView();
-    this.progress();
+      this.convoContainer.lastElementChild.scrollIntoView();
+      this.progress();
+      this.back();
+    }
   }
 
   progress() {
     const backBtn = this.shadowRoot.querySelector("conversation-back");
-    const re = this.shadowRoot.querySelector(
+    const re = this.shadowRoot.querySelectorAll(
       `node-replies.step${this.interactionId}`
     );
-    re.addEventListener("data-received", (event) => {
+    const lastRe = re[re.length - 1];
+
+    lastRe.addEventListener("data-received", (event) => {
       this.getInfoNode(event?.detail);
       backBtn.setAttribute("data", this.passRes);
-      backBtn.dispatchEvent(new Event("updateData"));
-      this.renderHTML();
-    });
-
-    backBtn.addEventListener("event-received", (event) => {
-      this.getInfoNode(event?.detail);
+      backBtn.updateData();
       this.renderHTML();
     });
   }
 
+  back() {
+    const backBtn = this.shadowRoot.querySelector("conversation-back");
+    backBtn.removeEventListener("event-received", this.backListener);
+    this.backListener = (event) => {
+      this.getInfoNode(event?.detail);
+      if (event?.detail?.loggedInteractionIndex === 0) {
+        backBtn.setAttribute("data", "true");
+      } else backBtn.setAttribute("data", this.passRes);
+      backBtn.updateData();
+      this.renderHTML();
+    };
+    backBtn.addEventListener("event-received", this.backListener);
+  }
+
   getInfoNode(response) {
-    this.passRes = JSON.stringify(response);
-    this.speaker =
-      JSON.stringify(response?.speaker) ||
-      JSON.stringify(response?.value?.speaker);
-    this.interactionId =
-      response?.value?.loggedInteractionIndex ||
-      response?.loggedInteractionIndex;
+    if (response !== "true") {
+      this.passRes = JSON.stringify(response);
+      this.speaker =
+        JSON.stringify(response?.speaker) ||
+        JSON.stringify(response?.value?.speaker);
+      this.interactionId =
+        response?.value?.loggedInteractionIndex ||
+        response?.loggedInteractionIndex;
+    } else this.passRes = response;
   }
 }
 
